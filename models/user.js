@@ -16,8 +16,8 @@ const userSchema = new Schema({
     },
     Comment: {
         type: String,
-        required: true
+        required: false
     }
 });
 
-module.exports = mongoose.Model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);

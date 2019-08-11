@@ -1,8 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
+const userRouter = require('./routes/user');
+
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+app.use('/user', userRouter);
 app.get('/', (req, res ,next) => {
     res.send('Hello World!');
 });
