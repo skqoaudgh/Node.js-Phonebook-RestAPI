@@ -34,5 +34,42 @@ module.exports = {
             res.status(500).json({error: 'Internal server error'});
             console.error(err);
         }
+    },
+
+    getUser: async (req, res, next) => {
+        try {
+            const word = req.params.word;
+            const user = await User.findOne({$or: [{ID: word}, {Nickname: word}]});
+            if(user) {
+                res.status(200).json(user);
+            }
+            else {
+                res.status(404).json({error: 'No user to serve'});
+            }
+        }
+        catch(err) {
+            res.status(500).json({error: 'Internal server error'});
+            console.error(err);           
+        }
+    },
+
+    getUserExceptionHandler: (req, res, next) => {
+        res.status(400).json({error: 'URI format is not available'});
+    },
+
+    getUsers: async (req, res, next) => {
+        try {
+            const users = await User.find();
+            if(users) {
+                res.status(200).json(users);
+            }
+            else {
+                res.status(404).json({error: 'No users to serve'});
+            }
+        }
+        catch(err) {
+            res.status(500).json({error: 'Internal server error'});
+            console.error(err);           
+        }
     }
 }
