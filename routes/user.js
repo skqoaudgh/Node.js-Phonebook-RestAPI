@@ -6,7 +6,8 @@ const userController = require('../controllers/user');
 
 // /user
 router.post('/', userController.createUser);
-router.get('/:word', userController.getUser);
+router.get('/id/:id', userController.getUserById);
+router.get('/nickname/:nickname', userController.getUserByNickname);
 router.get('/', userController.getUserExceptionHandler);
 
 // /users

@@ -3,17 +3,34 @@ const User = require('../models/user');
 module.exports = {
     createUser: async (req, res, next) => {
         try {
-            if(!req.body.id || !req.body.password.trim() || !req.body.nickname) {
+            if(!req.body.id.trim() || !req.body.password.trim() || !req.body.nickname) {
                 return res.status(400).json({error: 'Unexpected JSON input'});
+            }
+
+            if(req.body.id.trim().length < 4) {
+                return res.status(403).json({error: 'ID is too short'});
+            }
+            if(req.body.id.trim().length > 20) {
+                return res.status(403).json({error: 'ID is too long'});
+            }
+
+            if(req.body.nickname.length < 4) {
+                return res.status(403).json({error: 'Nickname is too short'});
+            }
+            if(req.body.nickname.length > 20) {
+                return res.status(403).json({error: 'Nickname is too long'});
+            }
+
+            if(req.body.password.trim().length < 4) {
+                return res.status(403).json({error: 'Password is too short'});
+            }
+            if(req.body.password.trim().length > 20) {
+                return res.status(403).json({error: 'Password is too long'});
             }
 
             const searchedUser = await User.find({$or: [{ID: req.body.id}, {Nickname: req.body.nickname}]});
             if(searchedUser.length) {
                 return res.status(409).json({error: 'ID or Nickname is already exist'});
-            }
-
-            if(req.body.password.trim().length < 6) {
-                return res.status(403).json({error: 'Password is too short'});
             }
 
             const inputUser = new User({
@@ -36,10 +53,27 @@ module.exports = {
         }
     },
 
-    getUser: async (req, res, next) => {
+    getUserById: async (req, res, next) => {
         try {
-            const word = req.params.word;
-            const user = await User.findOne({$or: [{ID: word}, {Nickname: word}]});
+            const id = req.params.id;
+            const user = await User.findOne({ID: id});
+            if(user) {
+                res.status(200).json(user);
+            }
+            else {
+                res.status(404).json({error: 'No user to serve'});
+            }
+        }
+        catch(err) {
+            res.status(500).json({error: 'Internal server error'});
+            console.error(err);           
+        }
+    },
+
+    getUserByNickname: async (req, res, next) => {
+        try {
+            const nickname = req.params.nickname;
+            const user = await User.findOne({Nickname: nickname});
             if(user) {
                 res.status(200).json(user);
             }
