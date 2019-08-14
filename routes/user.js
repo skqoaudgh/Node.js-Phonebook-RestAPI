@@ -8,6 +8,8 @@ const userController = require('../controllers/user');
 router.post('/', userController.createUser);
 router.get('/id/:id', userController.getUserById);
 router.get('/nickname/:nickname', userController.getUserByNickname);
+router.put('/id/:id', userController.updateUserById);
+router.put('/nickname/:nickname', userController.updateUserByNickname);
 router.get('/', userController.getUserExceptionHandler);
 
 // /users

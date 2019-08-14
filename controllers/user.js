@@ -34,7 +34,7 @@ module.exports = {
             }
 
             const inputUser = new User({
-                ID: req.body.id,
+                ID: req.body.id.trim(),
                 Password: req.body.password.trim(),
                 Nickname: req.body.nickname,
                 Comment: req.body.comment
@@ -104,6 +104,82 @@ module.exports = {
         catch(err) {
             console.error(err);     
             return res.status(500).json({error: 'Internal server error'});  
+        }
+    },
+
+    updateUserById: async (req, res, next) => {
+        try {
+            const id = req.params.id;
+            const user = await User.findOne({ID: id});
+            if(user) {
+                const searchedUser = await User.find({
+                    $and: [
+                        { $or: [{ID: req.body.id}, {Nickname: req.body.nickname}] },
+                        { _id: {$ne: user._id} }
+                    ]});
+                if(searchedUser.length) {
+                    return res.status(409).json({error: 'ID or Nickname is already exist'});
+                }
+
+                user.ID = req.body.id.trim();
+                user.Password = req.body.password.trim();
+                user.Nickname = req.body.nickname;
+                user.Comment = req.body.comment;
+
+                try {
+                    const updatedUser = await user.save();
+                    return res.status(200).json(updatedUser);
+                }
+                catch(err) {
+                    console.error(err);
+                    return res.status(500).json({error: 'Internal server error'});                  
+                }
+            }
+            else {
+                return res.status(404).json({error: 'No user to update'});
+            }
+        }
+        catch(err) {
+            console.error(err);
+            return res.status(500).json({error: 'Internal server error'});
+        }
+    },
+
+    updateUserByNickname: async (req, res, next) => {
+        try {
+            const nickname = req.params.nickname;
+            const user = await User.findOne({Nickname: nickname});
+            if(user) {
+                const searchedUser = await User.find({
+                    $and: [
+                        { $or: [{ID: req.body.id}, {Nickname: req.body.nickname}] },
+                        { _id: {$ne: user._id} }
+                    ]});
+                if(searchedUser.length) {
+                    return res.status(409).json({error: 'ID or Nickname is already exist'});
+                }
+
+                user.ID = req.body.id.trim();
+                user.Password = req.body.password.trim();
+                user.Nickname = req.body.nickname;
+                user.Comment = req.body.comment;
+
+                try {
+                    const updatedUser = await user.save();
+                    return res.status(200).json(updatedUser);
+                }
+                catch(err) {
+                    console.error(err);
+                    return res.status(500).json({error: 'Internal server error'});                  
+                }
+            }
+            else {
+                return res.status(404).json({error: 'No user to update'});
+            }
+        }
+        catch(err) {
+            console.error(err);
+            return res.status(500).json({error: 'Internal server error'});
         }
     }
 }
