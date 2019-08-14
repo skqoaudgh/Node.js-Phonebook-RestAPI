@@ -181,5 +181,39 @@ module.exports = {
             console.error(err);
             return res.status(500).json({error: 'Internal server error'});
         }
-    }
+    },
+
+    deleteUserById: async (req, res, next) => {
+        try {
+            const id = req.params.id;
+            const deletedUser = await User.findOneAndDelete({ID: id});
+            if(deletedUser) {
+                return res.status(404).json(deletedUser);
+            }
+            else {
+                return res.status(404).json({error: 'No user to delete'});
+            }
+        }
+        catch(err) {
+            console.error(err);
+            return res.status(500).json({error: 'Internal server error'});           
+        }
+    },
+
+    deleteUserByNickname: async (req, res, next) => {
+        try {
+            const nickname = req.params.nickname;
+            const deletedUser = await User.findOneAndDelete({Nickname: nickname});
+            if(deletedUser) {
+                return res.status(404).json(deletedUser);
+            }
+            else {
+                return res.status(404).json({error: 'No user to delete'});
+            }
+        }
+        catch(err) {
+            console.error(err);
+            return res.status(500).json({error: 'Internal server error'});           
+        }
+    },
 }
