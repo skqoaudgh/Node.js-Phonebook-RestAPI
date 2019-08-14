@@ -41,15 +41,15 @@ module.exports = {
             });
             const savedUser = await inputUser.save();
             if(inputUser == savedUser) {
-                res.status(200).json(savedUser);
+                return res.status(200).json(savedUser);
             }
             else {
-                res.status(204).json({error: 'Not expected value is found'});
+                return res.status(204).json({error: 'Not expected value is found'});
             }
         }
         catch(err) {
-            res.status(500).json({error: 'Internal server error'});
             console.error(err);
+            return res.status(500).json({error: 'Internal server error'});
         }
     },
 
@@ -58,15 +58,15 @@ module.exports = {
             const id = req.params.id;
             const user = await User.findOne({ID: id});
             if(user) {
-                res.status(200).json(user);
+                return res.status(200).json(user);
             }
             else {
-                res.status(404).json({error: 'No user to serve'});
+                return res.status(404).json({error: 'No user to serve'});
             }
         }
         catch(err) {
-            res.status(500).json({error: 'Internal server error'});
-            console.error(err);           
+            console.error(err);         
+            return res.status(500).json({error: 'Internal server error'});
         }
     },
 
@@ -75,35 +75,35 @@ module.exports = {
             const nickname = req.params.nickname;
             const user = await User.findOne({Nickname: nickname});
             if(user) {
-                res.status(200).json(user);
+                return res.status(200).json(user);
             }
             else {
-                res.status(404).json({error: 'No user to serve'});
+                return res.status(404).json({error: 'No user to serve'});
             }
         }
         catch(err) {
-            res.status(500).json({error: 'Internal server error'});
-            console.error(err);           
+            console.error(err);
+            return res.status(500).json({error: 'Internal server error'});   
         }
     },
 
     getUserExceptionHandler: (req, res, next) => {
-        res.status(400).json({error: 'URI format is not available'});
+        return res.status(400).json({error: 'URI format is not available'});
     },
 
     getUsers: async (req, res, next) => {
         try {
             const users = await User.find();
             if(users) {
-                res.status(200).json(users);
+                return res.status(200).json(users);
             }
             else {
-                res.status(404).json({error: 'No users to serve'});
+                return res.status(404).json({error: 'No users to serve'});
             }
         }
         catch(err) {
-            res.status(500).json({error: 'Internal server error'});
-            console.error(err);           
+            console.error(err);     
+            return res.status(500).json({error: 'Internal server error'});  
         }
     }
 }
