@@ -172,9 +172,12 @@ module.exports = {
                     return res.status(409).json({error: 'ID or Nickname is already exist'});
                 }
 
-                user.Password = req.body.password.trim();
-                user.Nickname = req.body.nickname;
-                user.Comment = req.body.comment;
+                if(req.body.password && req.body.password.trim())
+                    user.Password = req.body.password.trim();
+                if(req.body.nickname)
+                    user.Nickname = req.body.nickname;
+                if(req.body.comment)
+                    user.Comment = req.body.comment;
 
                 try {
                     const updatedUser = await user.save();

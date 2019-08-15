@@ -116,5 +116,41 @@ module.exports = {
             console.error(err);
             return res.status(500).json({error: 'Internal server error'});               
         }
+    },
+
+    updatePhonebook: async (req, res, nexdt) => {
+        try {
+            const id = req.id;
+            const item = req.params.id;
+            const phonebook = await Phonebook.findById(item);
+            if(phonebook.Creator == id) {
+                if(req.body.name) 
+                    phonebook.Name = req.body.name;
+                if(req.body.number && req.body.number.trim())
+                    phonebook.Number = req.body.number.trim();
+                if(req.body.Relation)
+                    phonebook.Relation = req.body.Relation;
+                if(req.body.email && req.body.email.trim())
+                    phonebook.Email = req.body.email.trim();
+                if(req.body.Comment)
+                    phonebook.Comment = req.body.Comment;
+                
+                try {
+                    const updatedPhonebook = await phonebook.save();
+                    return res.status(200).json(updatedPhonebook);
+                }
+                catch(err) {
+                    console.error(err);
+                    return res.status(500).json({error: 'Internal server error'});                   
+                }
+            }
+            else {
+                return res.status(401).json({error: 'Unauthenticated'}); 
+            }
+        }
+        catch(err) {
+            console.error(err);
+            return res.status(500).json({error: 'Internal server error'}); 
+        }
     }
 }
