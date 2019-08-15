@@ -121,7 +121,6 @@ module.exports = {
                     return res.status(409).json({error: 'ID or Nickname is already exist'});
                 }
 
-                user.ID = req.body.id.trim();
                 user.Password = req.body.password.trim();
                 user.Nickname = req.body.nickname;
                 user.Comment = req.body.comment;
@@ -158,8 +157,7 @@ module.exports = {
                 if(searchedUser.length) {
                     return res.status(409).json({error: 'ID or Nickname is already exist'});
                 }
-
-                user.ID = req.body.id.trim();
+                
                 user.Password = req.body.password.trim();
                 user.Nickname = req.body.nickname;
                 user.Comment = req.body.comment;
