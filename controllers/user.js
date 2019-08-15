@@ -4,7 +4,7 @@ const User = require('../models/user');
 module.exports = {
     loginUser: async (req, res, next) => {
         try {
-            if(!req.body.id.trim() || !req.body.password.trim()) {
+            if(!req.body.id || !req.body.password || !req.body.id.trim() || !req.body.password.trim()) {
                 return res.status(400).json({error: 'Unexpected JSON input'});
             }
 
@@ -38,7 +38,7 @@ module.exports = {
 
     createUser: async (req, res, next) => {
         try {
-            if(!req.body.id.trim() || !req.body.password.trim() || !req.body.nickname) {
+            if(!req.body.id || !req.body.password || !req.body.id.trim() || !req.body.password.trim() || !req.body.nickname) {
                 return res.status(400).json({error: 'Unexpected JSON input'});
             }
 
