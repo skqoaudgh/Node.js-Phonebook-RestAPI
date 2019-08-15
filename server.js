@@ -16,7 +16,8 @@ app.use(Auth);
 
 app.use('/user', userRouter.user);
 app.use('/users', userRouter.users);
-app.use('/phonebook', isAuth, phonebookRouter);
+app.use('/phonebook', isAuth, phonebookRouter.phonebook);
+app.use('/phonebooks', isAuth, phonebookRouter.phonebooks);
 app.get('/', (req, res ,next) => {
     res.send('Hello World!');
 });

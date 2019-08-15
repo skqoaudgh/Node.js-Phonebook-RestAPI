@@ -1,5 +1,9 @@
 const Phonebook = require('../models/phonebook');
 
+function isNumeric(value) {
+    return /^-{0,1}\d+$/.test(value);
+}
+
 module.exports = {
     createItem: async (req, res, next) => {
         try {
@@ -31,6 +35,86 @@ module.exports = {
         catch(err) {
             console.error(err);
             return res.status(500).json({error: 'Internal server error'});           
+        }
+    },
+
+    getPhonebooks: async (req, res, next) => {
+        try {
+            const id = req.id;
+            const phonebooks = await Phonebook.find({Creator: id});
+            if(phonebooks) {
+                return res.status(200).json(phonebooks);
+            }
+            else {
+                return res.status(404).json({error: 'No item to serve'});
+            }            
+        }
+        catch(err) {
+            console.error(err);
+            return res.status(500).json({error: 'Internal server error'});                
+        }
+    },
+
+    getPhonebook: async (req, res, next) => {
+        try {
+            const id = req.id;
+            const itemId = req.params.id;
+            const phonebook = await Phonebook.findById(itemId);
+            if(phonebook) {
+                if(phonebook.Creator != id) {
+                    return res.status(401).json({error: 'Unauthenticated'});
+                }
+                else {
+                    return res.status(200).json(phonebook);
+                }
+                
+            }
+            else {
+                return res.status(404).json({error: 'No item to serve'});
+            }            
+        }
+        catch(err) {
+            console.error(err);
+            return res.status(500).json({error: 'Internal server error'});                
+        }       
+    },
+
+    searchPhonebook: async (req, res, next) => {
+        try {
+            const id = req.id;
+            const searchWord = req.params.searchWord;
+            if(!searchWord || !searchWord.trim()) {
+                return res.status(400).json({error: 'Unexpected JSON input'});
+            }
+
+            let pbByName = [], pbByNumber = [], result = {};
+            pbByName = await Phonebook.find({$and: [
+                {Name: {"$regex": new RegExp(searchWord.replace(/\s+/g,"\\s+"), "gi")}},
+                {Creator: id}
+            ]});
+            if(isNumeric(searchWord)) {
+                pbByNumber = await Phonebook.find({$and: [
+                    {Number: {"$regex": new RegExp(searchWord.replace(/\s+/g,"\\s+"), "gi")}},
+                    {Creator: id}
+                ]});
+            }
+
+            if(pbByName.length > 0) {
+                result.resultByName = pbByName;
+            }
+            if(pbByNumber.length > 0) {
+                result.resultByNumber = pbByNumber;
+            }
+
+            if(pbByName.length == 0 && pbByNumber.length == 0) {
+                return res.status(404).json({error: 'No item to serve'});
+            }
+
+            return res.status(200).json(result);
+        }
+        catch(err) {
+            console.error(err);
+            return res.status(500).json({error: 'Internal server error'});               
         }
     }
 }
