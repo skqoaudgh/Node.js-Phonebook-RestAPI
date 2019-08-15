@@ -152,5 +152,28 @@ module.exports = {
             console.error(err);
             return res.status(500).json({error: 'Internal server error'}); 
         }
+    },
+
+    deletePhonebook: async (req, res, next) => {
+        try {
+            const id = req.id;
+            const item = req.params.id;
+            const deletedPhonebook = await Phonebook.findOneAndDelete({_id: item});
+            if(deletedPhonebook) {
+                if(deletedPhonebook.Creator == id) {
+                    return res.status(404).json(deletedPhonebook);
+                }
+                else {
+                    return res.status(401).json({error: 'Unauthenticated'});  
+                }
+            }
+            else {
+                return res.status(404).json({error: 'No user to delete'});
+            }
+        }
+        catch(err) {
+            console.error(err);
+            return res.status(500).json({error: 'Internal server error'});           
+        }
     }
 }
