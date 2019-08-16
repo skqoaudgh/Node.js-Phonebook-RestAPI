@@ -6,9 +6,10 @@ const phonebookController = require('../controllers/phonebook');
 
 // phonebook
 router.post('/', phonebookController.createItem);
-router.get('/:id', phonebookController.getPhonebook);
-router.put('/:id', phonebookController.updatePhonebook);
-router.delete('/:id', phonebookController.deletePhonebook);
+router.get('/:Itemid', phonebookController.getPhonebook);
+router.put('/:Itemid', phonebookController.updatePhonebook);
+router.delete('/:Itemid', phonebookController.deletePhonebook);
+router.get('/search/relation/:searchWord', phonebookController.searchPhonebookByRelation);
 router.get('/search/:searchWord', phonebookController.searchPhonebook);
 
 

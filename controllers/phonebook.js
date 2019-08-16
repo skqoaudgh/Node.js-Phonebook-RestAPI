@@ -20,9 +20,9 @@ module.exports = {
                 Creator: id,
                 Name: req.body.name,
                 Number: req.body.number.trim(),
-                Relation: req.body.Relation?(req.body.Relation):'None',
+                Relation: req.body.relation?(req.body.relation):'None',
                 Email: req.body.email?(req.body.email):'None',
-                Comment: req.body.Comment?(req.body.Comment):'None',
+                Comment: req.body.comment?(req.body.comment):'None',
             });
             const savedPhonebook = await inputPhonebook.save();
             if(inputPhonebook == savedPhonebook) {
@@ -58,7 +58,7 @@ module.exports = {
     getPhonebook: async (req, res, next) => {
         try {
             const id = req.id;
-            const itemId = req.params.id;
+            const itemId = req.params.Itemid;
             const phonebook = await Phonebook.findById(itemId);
             if(phonebook) {
                 if(phonebook.Creator != id) {
@@ -118,22 +118,45 @@ module.exports = {
         }
     },
 
+    searchPhonebookByRelation: async (req, res, next) => {
+        try {
+            const id = req.id;
+            const searchWord = req.params.searchWord;
+            if(!searchWord || !searchWord.trim()) {
+                return res.status(400).json({error: 'Unexpected JSON input'});
+            }
+
+            const phonebook = await Phonebook.find({$and: [
+                {Relation: {"$regex": new RegExp(searchWord.replace(/\s+/g,"\\s+"), "gi")}},
+                {Creator: id}
+            ]});
+            if(phonebook.length == 0) {
+                return res.status(404).json({error: 'No item to serve'});
+            }
+            return res.status(200).json(phonebook);
+        }
+        catch(err) {
+            console.error(err);
+            return res.status(500).json({error: 'Internal server error'});               
+        }
+    },
+
     updatePhonebook: async (req, res, nexdt) => {
         try {
             const id = req.id;
-            const item = req.params.id;
+            const item = req.params.Itemid;
             const phonebook = await Phonebook.findById(item);
             if(phonebook.Creator == id) {
                 if(req.body.name) 
                     phonebook.Name = req.body.name;
                 if(req.body.number && req.body.number.trim())
                     phonebook.Number = req.body.number.trim();
-                if(req.body.Relation)
-                    phonebook.Relation = req.body.Relation;
+                if(req.body.relation)
+                    phonebook.relation = req.body.relation;
                 if(req.body.email && req.body.email.trim())
                     phonebook.Email = req.body.email.trim();
-                if(req.body.Comment)
-                    phonebook.Comment = req.body.Comment;
+                if(req.body.comment)
+                    phonebook.Comment = req.body.comment;
                 
                 try {
                     const updatedPhonebook = await phonebook.save();
@@ -157,7 +180,7 @@ module.exports = {
     deletePhonebook: async (req, res, next) => {
         try {
             const id = req.id;
-            const item = req.params.id;
+            const item = req.params.Itemid;
             const deletedPhonebook = await Phonebook.findOneAndDelete({_id: item});
             if(deletedPhonebook) {
                 if(deletedPhonebook.Creator == id) {
