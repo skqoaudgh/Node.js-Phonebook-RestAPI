@@ -2,10 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const Auth = require('./middleware/auth');
-const isAuth = require('./middleware/isAuth');
 
 const userRouter = require('./routes/user');
-const phonebookRouter = require('./routes/phonebook');
+const authRouter = require('./routes/auth');
 
 const app = express();
 
@@ -14,10 +13,8 @@ app.use(express.urlencoded({extended: true}));
 
 app.use(Auth);
 
-app.use('/user', userRouter.user);
-app.use('/users', userRouter.users);
-app.use('/phonebook', isAuth, phonebookRouter.phonebook);
-app.use('/phonebooks', isAuth, phonebookRouter.phonebooks);
+app.use('/auth', authRouter);
+app.use('/users', userRouter);
 app.get('/', (req, res ,next) => {
     res.send('Hello World!');
 });

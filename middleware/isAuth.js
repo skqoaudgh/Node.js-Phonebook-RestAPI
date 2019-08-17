@@ -3,6 +3,7 @@ module.exports = (req, res, next) => {
         return res.status(401).json({error: 'Unauthenticated'});
     }
     else {
+        req.userId = req.params.userId;
         next();
     }
 }
