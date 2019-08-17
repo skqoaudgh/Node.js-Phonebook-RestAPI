@@ -8,7 +8,6 @@ router.post('/', phonebookController.createItem);
 router.get('/:Itemid', phonebookController.getPhonebook);
 router.put('/:Itemid', phonebookController.updatePhonebook);
 router.delete('/:Itemid', phonebookController.deletePhonebook);
-router.get('/search/relation/:searchWord', phonebookController.searchPhonebookByRelation);
-router.get('/search/:searchWord', phonebookController.searchPhonebook);
+router.post('/searches', phonebookController.searchPhonebook)
 
 module.exports = router;
