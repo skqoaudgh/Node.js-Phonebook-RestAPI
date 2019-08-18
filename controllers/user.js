@@ -75,7 +75,7 @@ module.exports = {
         try {
             const userId = req.params.userId;
             if(!mongoose.Types.ObjectId.isValid(userId)) {
-                return res.status(422).json({error: 'User ID incorrect'});
+                return res.status(422).json({error: 'Invalid user ID'});
             }
 
             const user = await User.findById(userId).select('-Password');
@@ -95,7 +95,7 @@ module.exports = {
         try {
             const userId = req.params.userId;
             if(!mongoose.Types.ObjectId.isValid(userId)) {
-                return res.status(422).json({error: 'User ID incorrect'});
+                return res.status(422).json({error: 'Invalid user ID'});
             }
 
             const user = await User.findById(userId);
@@ -121,7 +121,7 @@ module.exports = {
                 user.Comment = req.body.comment;
 
             try {
-                const updatedUser = await user.save().select('-Password');
+                const updatedUser = await user.save();
                 res.status(200).json(updatedUser);
             }
             catch(err) {
