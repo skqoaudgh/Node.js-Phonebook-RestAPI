@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt-nodejs');
 const User = require('../models/user');
 
 module.exports = {
@@ -39,9 +40,10 @@ module.exports = {
                 return res.status(409).json({error: 'ID or Nickname is already exist'});
             }
 
+            const hashedPassword = await bcrypt.hashSync(req.body.password);
             const inputUser = new User({
                 ID: req.body.id.trim(),
-                Password: req.body.password.trim(),
+                Password: hashedPassword,
                 Nickname: req.body.nickname,
                 Comment: req.body.comment
             });
