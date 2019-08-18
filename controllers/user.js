@@ -7,32 +7,32 @@ module.exports = {
     createUser: async (req, res, next) => {
         try {
             if(!req.body.id || !req.body.password || !req.body.id.trim() || !req.body.password.trim() || !req.body.nickname) {
-                return res.status(400).json({error: 'Unexpected JSON input'});
+                return res.status(400).json({error: 'Invalid JSON format'});
             }
 
             if(req.body.id.trim().length < 4) {
-                return res.status(403).json({error: 'ID is too short'});
+                return res.status(422).json({error: 'ID is too short'});
             }
             else if(req.body.id.trim().length > 20) {
-                return res.status(403).json({error: 'ID is too long'});
+                return res.status(422).json({error: 'ID is too long'});
             }
 
             if(req.body.nickname.length < 4) {
-                return res.status(403).json({error: 'Nickname is too short'});
+                return res.status(422).json({error: 'Nickname is too short'});
             }
             else if(req.body.nickname.length > 20) {
-                return res.status(403).json({error: 'Nickname is too long'});
+                return res.status(422).json({error: 'Nickname is too long'});
             }
 
             if(req.body.password.trim().length < 4) {
-                return res.status(403).json({error: 'Password is too short'});
+                return res.status(422).json({error: 'Password is too short'});
             }
             else if(req.body.password.trim().length > 20) {
-                return res.status(403).json({error: 'Password is too long'});
+                return res.status(422).json({error: 'Password is too long'});
             }
 
             if(req.body.comment.trim().length > 100) {
-                return res.status(403).json({error: 'Comment is too long'});
+                return res.status(422).json({error: 'Comment is too long'});
             }
 
             const searchedUser = await User.find({$or: [{ID: req.body.id}, {Nickname: req.body.nickname}]});
@@ -75,7 +75,7 @@ module.exports = {
         try {
             const userId = req.params.userId;
             if(!mongoose.Types.ObjectId.isValid(userId)) {
-                return res.status(400).json({error: 'User ID incorrect'});
+                return res.status(422).json({error: 'User ID incorrect'});
             }
 
             const user = await User.findById(userId).select('-Password');
@@ -95,7 +95,7 @@ module.exports = {
         try {
             const userId = req.params.userId;
             if(!mongoose.Types.ObjectId.isValid(userId)) {
-                return res.status(400).json({error: 'User ID incorrect'});
+                return res.status(422).json({error: 'User ID incorrect'});
             }
 
             const user = await User.findById(userId);
@@ -139,7 +139,7 @@ module.exports = {
         try {
             const userId = req.params.userId;
             if(!mongoose.Types.ObjectId.isValid(userId)) {
-                return res.status(400).json({error: 'User ID incorrect'});
+                return res.status(422).json({error: 'Invalid user ID'});
             }
 
             const deletedUser = await User.findOneAndDelete({_id: userId}).select('-Password');

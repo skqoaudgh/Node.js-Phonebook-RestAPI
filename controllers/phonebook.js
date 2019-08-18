@@ -13,7 +13,7 @@ module.exports = {
     createItem: async (req, res, next) => {
         try {
             if(!req.body.name || !req.body.number || !req.body.name.trim() || !req.body.number.trim()) {
-                return res.status(400).json({error: 'Unexpected JSON input'});
+                return res.status(400).json({error: 'Invalid JSON format'});
             }
 
             if(req.body.relation) {
@@ -33,23 +33,23 @@ module.exports = {
             }
 
             if(req.body.name.length > 20) {
-                return res.status(403).json({error: 'Name is too long'});
+                return res.status(422).json({error: 'Name is too long'});
             }
 
             if(req.body.relation.length > 20) {
-                return res.status(403).json({error: 'Relation is too long'});
+                return res.status(422).json({error: 'Relation is too long'});
             }
 
             if(req.body.comment.length > 20) {
-                return res.status(403).json({error: 'Relation is too long'});
+                return res.status(422).json({error: 'Relation is too long'});
             }
 
             if(req.body.address.length > 20) {
-                return res.status(403).json({error: 'Address is too long'});
+                return res.status(422).json({error: 'Address is too long'});
             }
                        
             if(!ValidateEmail(req.body.email)) {
-                return res.status(403).json({error: 'Email format incorrect'});
+                return res.status(422).json({error: 'Email format incorrect'});
             }
 
             const inputPhonebook = new Phonebook({
@@ -62,10 +62,6 @@ module.exports = {
                 Comment: req.body.comment?(req.body.comment):'None',
             });
             const savedPhonebook = await inputPhonebook.save();
-            if(inputPhonebook != savedPhonebook) {
-                return res.status(204).json({error: 'Not expected value is found'});
-            }
-
             res.status(201).json(savedPhonebook);    
         }
         catch(err) {
@@ -93,7 +89,7 @@ module.exports = {
         try {
             const itemId = req.params.Itemid;
             if(!mongoose.Types.ObjectId.isValid(itemId)) {
-                return res.status(400).json({error: 'Item ID incorrect'});
+                return res.status(422).json({error: 'Invalid item ID'});
             }
 
             const phonebook = await Phonebook.findOne({_id: itemId, Creator: req.userId});
@@ -113,7 +109,7 @@ module.exports = {
         try {
             const itemid = req.params.Itemid;
             if(!mongoose.Types.ObjectId.isValid(itemId)) {
-                return res.status(400).json({error: 'Item ID incorrect'});
+                return res.status(422).json({error: 'Invalid item ID'});
             }
 
             const phonebook = await Phonebook.findOne({_id: itemid, Creator: req.userId});
@@ -151,7 +147,7 @@ module.exports = {
         try {
             const itemId = req.params.Itemid;
             if(!mongoose.Types.ObjectId.isValid(itemId)) {
-                return res.status(400).json({error: 'Item ID incorrect'});
+                return res.status(422).json({error: 'Invalid item ID'});
             }
 
             const deletedPhonebook = await Phonebook.findOneAndDelete({_id: itemId, Creator: req.userId});
@@ -170,7 +166,7 @@ module.exports = {
     searchPhonebook: async (req, res, next) => {
         try {
             if(req.body.terms) {
-                return res.status(400).json({error: 'Unexpected JSON input'});
+                return res.status(400).json({error: 'Invalid JSON format'});
             }
 
             const name = req.body.terms.name?req.body.terms.name:'';
