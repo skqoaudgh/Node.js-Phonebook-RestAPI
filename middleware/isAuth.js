@@ -4,6 +4,9 @@ module.exports = (req, res, next) => {
     }
     else {
         req.userId = req.params.userId;
+        if(req.id != req.userId) {
+            return res.status(401).json({error: 'Unauthenticated'});
+        }
         next();
     }
 }

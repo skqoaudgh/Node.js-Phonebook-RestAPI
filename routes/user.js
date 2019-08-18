@@ -6,11 +6,11 @@ const phonebookRouter = require('../routes/phonebook');
 const isAuth = require('../middleware/isAuth');
 const checkURI = require('../middleware/checkURI');
 
-router.get('/', userController.getUsers);
+router.get('/', isAuth, userController.getUsers);
 router.post('/', userController.createUser);
-router.get('/:userId', userController.getUser);
-router.put('/:userId', userController.updateUser);
-router.delete('/:userId', userController.deleteUser);
+router.get('/:userId', isAuth, checkURI, userController.getUser);
+router.put('/:userId', isAuth, checkURI, userController.updateUser);
+router.delete('/:userId', isAuth, checkURI, userController.deleteUser);
 
 router.use('/:userId/phonebooks', isAuth, checkURI, phonebookRouter);
 

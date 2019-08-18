@@ -57,10 +57,6 @@ module.exports = {
 
     getUsers: async (req, res, next) => {
         try {
-            if(!req.isAuth) {
-                return res.status(401).json({error: 'Unauthenticated'});
-            }
-            
             const users = await User.find();
             if(users) {
                 return res.status(200).json(users);
@@ -77,23 +73,14 @@ module.exports = {
 
     getUser: async (req, res, next) => {
         try {
-            if(!req.isAuth) {
-                return res.status(401).json({error: 'Unauthenticated'});
-            }
-
             const userId = req.params.userId;
             if(mongoose.Types.ObjectId.isValid(userId)) {
                 const user = await User.findById(userId);
-                if(req.id == userId) {
-                    if(user) {
-                        return res.status(200).json(user);
-                    }
-                    else {
-                        return res.status(404).json({error: 'No user to serve'});
-                    }
+                if(user) {
+                    return res.status(200).json(user);
                 }
                 else {
-                    return res.status(401).json({error: 'Unauthenticated'});
+                    return res.status(404).json({error: 'No user to serve'});
                 }
             }
             else {
@@ -108,46 +95,37 @@ module.exports = {
 
     updateUser: async (req, res, next) => {
         try {
-            if(!req.isAuth) {
-                return res.status(401).json({error: 'Unauthenticated'});
-            }
-
             const userId = req.params.userId;
             if(mongoose.Types.ObjectId.isValid(userId)) {
-                if(req.id == userId) {
-                    const user = await User.findById(userId);
-                    if(user) {
-                        const searchedUser = await User.find({
-                            $and: [
-                                { $or: [{ID: req.body.id}, {Nickname: req.body.nickname}] },
-                                { _id: {$ne: user._id} }
-                            ]});
-                        if(searchedUser.length) {
-                            return res.status(409).json({error: 'ID or Nickname is already exist'});
-                        }
-        
-                        if(req.body.password && req.body.password.trim())
-                            user.Password = req.body.password.trim();
-                        if(req.body.nickname)
-                            user.Nickname = req.body.nickname;
-                        if(req.body.comment)
-                            user.Comment = req.body.comment;
-        
-                        try {
-                            const updatedUser = await user.save();
-                            return res.status(200).json(updatedUser);
-                        }
-                        catch(err) {
-                            console.error(err);
-                            return res.status(500).json({error: 'Internal server error'});                  
-                        }
+                const user = await User.findById(userId);
+                if(user) {
+                    const searchedUser = await User.find({
+                        $and: [
+                            { $or: [{ID: req.body.id}, {Nickname: req.body.nickname}] },
+                            { _id: {$ne: user._id} }
+                        ]});
+                    if(searchedUser.length) {
+                        return res.status(409).json({error: 'ID or Nickname is already exist'});
                     }
-                    else {
-                        return res.status(404).json({error: 'No user to update'});
+    
+                    if(req.body.password && req.body.password.trim())
+                        user.Password = req.body.password.trim();
+                    if(req.body.nickname)
+                        user.Nickname = req.body.nickname;
+                    if(req.body.comment)
+                        user.Comment = req.body.comment;
+    
+                    try {
+                        const updatedUser = await user.save();
+                        return res.status(200).json(updatedUser);
+                    }
+                    catch(err) {
+                        console.error(err);
+                        return res.status(500).json({error: 'Internal server error'});                  
                     }
                 }
                 else {
-                    return res.status(401).json({error: 'Unauthenticated'});
+                    return res.status(404).json({error: 'No user to update'});
                 }
             }
             else {
@@ -162,23 +140,14 @@ module.exports = {
 
     deleteUser: async (req, res, next) => {
         try {
-            if(!req.isAuth) {
-                return res.status(401).json({error: 'Unauthenticated'});
-            }
-
             const userId = req.params.userId;
             if(mongoose.Types.ObjectId.isValid(userId)) {
-                if(req.id == userId) {
-                    const deletedUser = await User.findOneAndDelete({_id: userId});
-                    if(deletedUser) {
-                        return res.status(404).json(deletedUser);
-                    }
-                    else {
-                        return res.status(404).json({error: 'No user to delete'});
-                    }
+                const deletedUser = await User.findOneAndDelete({_id: userId});
+                if(deletedUser) {
+                    return res.status(404).json(deletedUser);
                 }
                 else {
-                    return res.status(401).json({error: 'Unauthenticated'});
+                    return res.status(404).json({error: 'No user to delete'});
                 }
             }
             else {
