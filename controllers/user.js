@@ -58,7 +58,7 @@ module.exports = {
 
     getUsers: async (req, res, next) => {
         try {
-            const users = await User.find();
+            const users = await User.find().select('-Password');
             if(!users) {
                 return res.status(404).json({error: 'No users to serve'});
             }
@@ -78,7 +78,7 @@ module.exports = {
                 return res.status(400).json({error: 'User ID incorrect'});
             }
 
-            const user = await User.findById(userId);
+            const user = await User.findById(userId).select('-Password');
             if(!user) {
                 return res.status(404).json({error: 'No user to serve'});
             }
@@ -112,15 +112,16 @@ module.exports = {
                 return res.status(409).json({error: 'ID or Nickname is already exist'});
             }
 
+            const hashedPassword = await bcrypt.hashSync(req.body.password);
             if(req.body.password && req.body.password.trim())
-                user.Password = req.body.password.trim();
+                user.Password = hashedPassword;
             if(req.body.nickname)
                 user.Nickname = req.body.nickname;
             if(req.body.comment)
                 user.Comment = req.body.comment;
 
             try {
-                const updatedUser = await user.save();
+                const updatedUser = await user.save().select('-Password');
                 res.status(200).json(updatedUser);
             }
             catch(err) {
@@ -141,7 +142,7 @@ module.exports = {
                 return res.status(400).json({error: 'User ID incorrect'});
             }
 
-            const deletedUser = await User.findOneAndDelete({_id: userId});
+            const deletedUser = await User.findOneAndDelete({_id: userId}).select('-Password');
             if(!deletedUser) {
                 return res.status(404).json({error: 'No user to delete'});
             }
