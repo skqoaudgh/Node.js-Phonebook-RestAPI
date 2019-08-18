@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Phonebook = require('../models/phonebook');
 
 function isNumeric(value) {
@@ -70,18 +71,23 @@ module.exports = {
         try {
             const userId = req.userId;
             const itemId = req.params.Itemid;
-            if(req.id == userId) {
-                const phonebook = await Phonebook.findOne({_id: itemId, Creator: userId});
-                if(phonebook) {
-                    return res.status(200).json(phonebook);
+            if(mongoose.Types.ObjectId.isValid(itemId)) {
+                if(req.id == userId) {
+                    const phonebook = await Phonebook.findOne({_id: itemId, Creator: userId});
+                    if(phonebook) {
+                        return res.status(200).json(phonebook);
+                    }
+                    else {
+                        return res.status(404).json({error: 'No item to serve'});
+                    }
                 }
                 else {
-                    return res.status(404).json({error: 'No item to serve'});
+                    return res.status(401).json({error: 'Unauthenticated'});
                 }
             }
             else {
-                return res.status(401).json({error: 'Unauthenticated'});
-            }            
+                return res.status(400).json({error: 'Item ID incorrect'});
+            }             
         }
         catch(err) {
             console.error(err);
@@ -94,32 +100,37 @@ module.exports = {
             const userId = req.userId;
             if(req.id == userId) {
                 const itemid = req.params.Itemid;
-                const phonebook = await Phonebook.findOne({_id: itemid, Creator: userId});
-    
-                if(phonebook) {
-                    if(req.body.name) 
-                        phonebook.Name = req.body.name;
-                    if(req.body.number && req.body.number.trim())
-                        phonebook.Number = req.body.number.trim();
-                    if(req.body.relation)
-                        phonebook.relation = req.body.relation;
-                    if(req.body.email && req.body.email.trim())
-                        phonebook.Email = req.body.email.trim();
-                    if(req.body.comment)
-                        phonebook.Comment = req.body.comment;
-                    
-                    try {
-                        const updatedPhonebook = await phonebook.save();
-                        return res.status(200).json(updatedPhonebook);
+                if(mongoose.Types.ObjectId.isValid(itemId)) {
+                    const phonebook = await Phonebook.findOne({_id: itemid, Creator: userId});
+        
+                    if(phonebook) {
+                        if(req.body.name) 
+                            phonebook.Name = req.body.name;
+                        if(req.body.number && req.body.number.trim())
+                            phonebook.Number = req.body.number.trim();
+                        if(req.body.relation)
+                            phonebook.relation = req.body.relation;
+                        if(req.body.email && req.body.email.trim())
+                            phonebook.Email = req.body.email.trim();
+                        if(req.body.comment)
+                            phonebook.Comment = req.body.comment;
+                        
+                        try {
+                            const updatedPhonebook = await phonebook.save();
+                            return res.status(200).json(updatedPhonebook);
+                        }
+                        catch(err) {
+                            console.error(err);
+                            return res.status(500).json({error: 'Internal server error'});                   
+                        }
                     }
-                    catch(err) {
-                        console.error(err);
-                        return res.status(500).json({error: 'Internal server error'});                   
+                    else {
+                        return res.status(404).json({error: 'No user to update'});
                     }
                 }
                 else {
-                    return res.status(404).json({error: 'No user to update'});
-                }
+                    return res.status(400).json({error: 'Item ID incorrect'});
+                }  
             }
             else {
                 return res.status(401).json({error: 'Unauthenticated'}); 
@@ -136,13 +147,18 @@ module.exports = {
             const userId = req.userId;
             if(req.id == userId) {
                 const itemId = req.params.Itemid;
-                const deletedPhonebook = await Phonebook.findOneAndDelete({_id: itemId, Creator: userId});
-                if(deletedPhonebook) {
-                    return res.status(404).json(deletedPhonebook);
+                if(mongoose.Types.ObjectId.isValid(itemId)) {
+                    const deletedPhonebook = await Phonebook.findOneAndDelete({_id: itemId, Creator: userId});
+                    if(deletedPhonebook) {
+                        return res.status(404).json(deletedPhonebook);
+                    }
+                    else {
+                        return res.status(404).json({error: 'No user to delete'});
+                    }
                 }
                 else {
-                    return res.status(404).json({error: 'No user to delete'});
-                }
+                    return res.status(400).json({error: 'Item ID incorrect'});
+                } 
             }
             else {
                 return res.status(401).json({error: 'Unauthenticated'}); 
@@ -188,77 +204,4 @@ module.exports = {
             return res.status(500).json({error: 'Internal server error'});    
         }
     }
-    /*
-    searchPhonebook: async (req, res, next) => {
-        try {
-            const userId = req.userId;
-            if(req.id == userId) {
-                const searchWord = req.params.searchWord;
-                if(!searchWord || !searchWord.trim()) {
-                    return res.status(400).json({error: 'Unexpected JSON input'});
-                }
-    
-                let pbByName = [], pbByNumber = [], result = {};
-                pbByName = await Phonebook.find({$and: [
-                    {Name: {"$regex": new RegExp(searchWord.replace(/\s+/g,"\\s+"), "gi")}},
-                    {Creator: userId}
-                ]});
-                if(isNumeric(searchWord)) {
-                    pbByNumber = await Phonebook.find({$and: [
-                        {Number: {"$regex": new RegExp(searchWord.replace(/\s+/g,"\\s+"), "gi")}},
-                        {Creator: userId}
-                    ]});
-                }
-    
-                if(pbByName.length > 0) {
-                    result.resultByName = pbByName;
-                }
-                if(pbByNumber.length > 0) {
-                    result.resultByNumber = pbByNumber;
-                }
-    
-                if(pbByName.length == 0 && pbByNumber.length == 0) {
-                    return res.status(404).json({error: 'No item to serve'});
-                }
-
-                return res.status(200).json(result);
-            }
-            else {
-                return res.status(401).json({error: 'Unauthenticated'});
-            }
-        }
-        catch(err) {
-            console.error(err);
-            return res.status(500).json({error: 'Internal server error'});               
-        }
-    },
-
-    searchPhonebookByRelation: async (req, res, next) => {
-        try {
-            const userId = req.userId;
-            if(req.id == userId) {
-                const searchWord = req.params.searchWord;
-                if(!searchWord || !searchWord.trim()) {
-                    return res.status(400).json({error: 'Unexpected JSON input'});
-                }
-    
-                const phonebook = await Phonebook.find({$and: [
-                    {Relation: {"$regex": new RegExp(searchWord.replace(/\s+/g,"\\s+"), "gi")}},
-                    {Creator: userId}
-                ]});
-                if(phonebook.length == 0) {
-                    return res.status(404).json({error: 'No item to serve'});
-                }
-                return res.status(200).json(phonebook);
-            }
-            else {
-                return res.status(401).json({error: 'Unauthenticated'});
-            }
-        }
-        catch(err) {
-            console.error(err);
-            return res.status(500).json({error: 'Internal server error'});               
-        }
-    }
-    */
 }
