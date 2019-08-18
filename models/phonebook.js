@@ -22,6 +22,10 @@ const phonebookSchema = new Schema({
         type: String,
         required: false
     },
+    Address: {
+        type: String,
+        required: false
+    },
     Comment: {
         type: String,
         required: false

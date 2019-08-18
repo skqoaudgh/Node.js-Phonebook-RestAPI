@@ -27,7 +27,11 @@ module.exports = {
             if(req.body.comment) {
                 req.body.comment = req.body.comment.trim();
             }
-            
+ 
+            if(req.body.address) {
+                req.body.address = req.body.address.trim();
+            }
+
             if(req.body.name.length > 20) {
                 return res.status(403).json({error: 'Name is too long'});
             }
@@ -39,7 +43,11 @@ module.exports = {
             if(req.body.comment.length > 20) {
                 return res.status(403).json({error: 'Relation is too long'});
             }
-            
+
+            if(req.body.address.length > 20) {
+                return res.status(403).json({error: 'Address is too long'});
+            }
+                       
             if(!ValidateEmail(req.body.email)) {
                 return res.status(403).json({error: 'Email format incorrect'});
             }
@@ -50,6 +58,7 @@ module.exports = {
                 Number: req.body.number.trim(),
                 Relation: req.body.relation?(req.body.relation):'None',
                 Email: req.body.email?(req.body.email):'None',
+                Address: req.body.address?(req.body.address):'None',
                 Comment: req.body.comment?(req.body.comment):'None',
             });
             const savedPhonebook = await inputPhonebook.save();
