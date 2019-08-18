@@ -1,8 +1,12 @@
 const mongoose = require('mongoose');
 const Phonebook = require('../models/phonebook');
 
-function isNumeric(value) {
-    return /^-{0,1}\d+$/.test(value);
+function ValidateEmail(mail) 
+{
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+        return true;
+    }
+    return false;
 }
 
 module.exports = {
@@ -12,8 +16,32 @@ module.exports = {
                 return res.status(400).json({error: 'Unexpected JSON input'});
             }
 
+            if(req.body.relation) {
+                req.body.relation = req.body.relation.trim();
+            }
+
             if(req.body.email) {
                 req.body.email = req.body.email.trim();
+            }
+
+            if(req.body.comment) {
+                req.body.comment = req.body.comment.trim();
+            }
+            
+            if(req.body.name.length > 20) {
+                return res.status(403).json({error: 'Name is too long'});
+            }
+
+            if(req.body.relation.length > 20) {
+                return res.status(403).json({error: 'Relation is too long'});
+            }
+
+            if(req.body.comment.length > 20) {
+                return res.status(403).json({error: 'Relation is too long'});
+            }
+            
+            if(!ValidateEmail(req.body.email)) {
+                return res.status(403).json({error: 'Email format incorrect'});
             }
 
             const inputPhonebook = new Phonebook({
@@ -135,7 +163,7 @@ module.exports = {
             if(req.body.terms) {
                 return res.status(400).json({error: 'Unexpected JSON input'});
             }
-            
+
             const name = req.body.terms.name?req.body.terms.name:'';
             const number = req.body.terms.number?req.body.terms.number:'';
             const relation = req.body.terms.relation?req.body.terms.relation:'';

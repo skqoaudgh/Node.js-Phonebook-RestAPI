@@ -12,22 +12,26 @@ module.exports = {
             if(req.body.id.trim().length < 4) {
                 return res.status(403).json({error: 'ID is too short'});
             }
-            if(req.body.id.trim().length > 20) {
+            else if(req.body.id.trim().length > 20) {
                 return res.status(403).json({error: 'ID is too long'});
             }
 
             if(req.body.nickname.length < 4) {
                 return res.status(403).json({error: 'Nickname is too short'});
             }
-            if(req.body.nickname.length > 20) {
+            else if(req.body.nickname.length > 20) {
                 return res.status(403).json({error: 'Nickname is too long'});
             }
 
             if(req.body.password.trim().length < 4) {
                 return res.status(403).json({error: 'Password is too short'});
             }
-            if(req.body.password.trim().length > 20) {
+            else if(req.body.password.trim().length > 20) {
                 return res.status(403).json({error: 'Password is too long'});
+            }
+
+            if(req.body.comment.trim().length > 100) {
+                return res.status(403).json({error: 'Comment is too long'});
             }
 
             const searchedUser = await User.find({$or: [{ID: req.body.id}, {Nickname: req.body.nickname}]});
@@ -42,10 +46,6 @@ module.exports = {
                 Comment: req.body.comment
             });
             const savedUser = await inputUser.save();
-            if(inputUser != savedUser) {
-                return res.status(204).json({error: 'Not expected value is found'});
-            }
-
             res.status(201).json(savedUser);
         }
         catch(err) {
@@ -58,7 +58,6 @@ module.exports = {
         try {
             const users = await User.find();
             if(!users) {
-                
                 return res.status(404).json({error: 'No users to serve'});
             }
 
