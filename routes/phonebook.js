@@ -5,9 +5,9 @@ const phonebookController = require('../controllers/phonebook');
 
 router.get('/', phonebookController.getPhonebooks);
 router.post('/', phonebookController.createItem);
-router.get('/:Itemid', phonebookController.getPhonebook);
-router.put('/:Itemid', phonebookController.updatePhonebook);
-router.delete('/:Itemid', phonebookController.deletePhonebook);
+router.get('/:itemId', phonebookController.getPhonebook);
+router.put('/:itemId', phonebookController.updatePhonebook);
+router.delete('/:itemId', phonebookController.deletePhonebook);
 router.post('/searches', phonebookController.searchPhonebook)
 
 module.exports = router;

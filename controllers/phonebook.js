@@ -107,12 +107,12 @@ module.exports = {
 
     updatePhonebook: async (req, res, nexdt) => {
         try {
-            const itemid = req.params.Itemid;
+            const itemId = req.params.itemId;
             if(!mongoose.Types.ObjectId.isValid(itemId)) {
                 return res.status(422).json({error: 'Invalid item ID'});
             }
 
-            const phonebook = await Phonebook.findOne({_id: itemid, Creator: req.userId});
+            const phonebook = await Phonebook.findOne({_id: itemId, Creator: req.userId});
             if(!phonebook) {
                 return res.status(404).json({error: 'No user to update'});
             }
@@ -145,12 +145,12 @@ module.exports = {
 
     deletePhonebook: async (req, res, next) => {
         try {
-            const itemId = req.params.Itemid;
+            const itemId = req.params.itemId;
             if(!mongoose.Types.ObjectId.isValid(itemId)) {
                 return res.status(422).json({error: 'Invalid item ID'});
             }
 
-            const deletedPhonebook = await Phonebook.findOneAndDelete({_id: itemId, Creator: req.userId});
+            const deletedPhonebook = await Phonebook.findOneAndDelete({_id: ititemIdemId, Creator: req.userId});
             if(!deletedPhonebook) {
                 return res.status(404).json({error: 'No user to delete'});
             }
