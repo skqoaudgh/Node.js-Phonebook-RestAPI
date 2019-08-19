@@ -15,6 +15,7 @@ Phonebook Rest API made with Node.js, MongoDB
   3. [Show Phonebook Item](#show-phonebook-item)
   4. [Update Phonebook Item](#update-phonebook-item)
   5. [Delete Phonebook Item](#delete-phonebook-item)
+  6. [Search Phonebook Item](#search-phonebook-item)
   
 **Auth**
 ----
@@ -203,6 +204,11 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
   * **Code:** 404 Not Found <br />
     **Content:** `{ error : "No users to serve" }`
 
@@ -235,7 +241,7 @@ Phonebook Rest API made with Node.js, MongoDB
 
    **Required:**
  
-   `userId=[Mongoose ObjectID]`
+   `userId=[MongoDB ObjectID]`
 
 * **Data Params**
 
@@ -257,6 +263,11 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
   * **Code:** 422 Unprocessable Entity <br />
     **Content:** `{ error : "Invalid user ID" }`
 
@@ -294,7 +305,7 @@ Phonebook Rest API made with Node.js, MongoDB
 
    **Required:**
  
-   `userId=[Mongoose ObjectID]`
+   `userId=[MongoDB ObjectID]`
 
 * **Data Params**
 
@@ -322,6 +333,11 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
   * **Code:** 422 Unprocessable Entity <br />
     **Content:** `{ error : "Invalid user ID" }`
 
@@ -368,7 +384,7 @@ Phonebook Rest API made with Node.js, MongoDB
 
    **Required:**
  
-   `userId=[Mongoose ObjectID]`
+   `userId=[MongoDB ObjectID]`
 
 * **Data Params**
 
@@ -390,6 +406,11 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
   * **Code:** 422 Unprocessable Entity <br />
     **Content:** `{ error : "Invalid user ID" }`
 
@@ -409,4 +430,493 @@ Phonebook Rest API made with Node.js, MongoDB
   DELETE http://127.0.0.1:3000/users/5d5902b65d971b14b8aabd35 HTTP/1.1
   content-type: application/json
   Authorization: bearer <Your auth token>
+  ```
+
+**Create Phonebook Item**
+----
+  Creates new phonebook item on database, and returns json data about the saved item. 
+
+* **URL**
+
+  /users/:userId/phonebooks
+
+* **Method:**
+
+  `POST`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `userId=[MongoDB ObjectID]`
+
+* **Data Params**
+
+   **Required:**
+ 
+   `name=[string]` <br />
+   `number=[string]`
+   
+    **Optional:**
+ 
+   `relation=[string]` <br />
+   `email=[string]` <br />
+   `address=[string]` <br />
+   `comment=[string]`
+
+* **Success Response:**
+
+  * **Code:** 201 Created <br />
+    **Content:** 
+    ```javascript
+    {
+      "_id": "5d5a229b48ecb923ccdc2627",
+      "Creator": "5d5a2208dfed63256c85e548",
+      "Name": "Yura",
+      "Number": "01012123434",
+      "Relation": "friend",
+      "Email": "myungho.dev@gmail.com",
+      "Address": "Gwangju, Korea",
+      "Comment": "best friend",
+      "__v": 0
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid user ID" }`
+
+  OR
+  
+  * **Code:** 400 Bad Request <br />
+    **Content:** `{ error : "Invalid JSON format" }`
+
+  OR
+
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "<field> is too long" }`
+
+  OR
+
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Email format incorrect" }`
+
+  OR
+
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** `{ error : "Internal server errort" }`
+    
+* **Sample Call:**
+
+  ```HTTP
+  POST http://127.0.0.1:3000/users/5d5a2208dfed63256c85e548/phonebooks HTTP/1.1
+  Authorization: bearer <Your auth token>
+  content-type: application/json
+
+  {
+      "name": "Yura",
+      "number": "01012123434",
+      "relation": "friend",
+      "email": "myungho.dev@gmail.com",
+      "address": "Gwangju, Korea",
+      "comment": "best friend"
+  }
+  ```
+  
+**Show Phonebook Items**
+----
+  Returns json data about all phonebook items.
+
+* **URL**
+
+  /users/:userId/phonebooks
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `userId=[MongoDB ObjectID]`
+
+* **Data Params**
+
+   None
+
+* **Success Response:**
+
+  * **Code:** 200 OK <br />
+    **Content:** 
+    ```javascript
+    [
+      {
+        "_id": "5d5a229b48ecb923ccdc2627",
+        "Creator": "5d5a2208dfed63256c85e548", // Your MongoDB ObjectID
+        "Name": "Yura",
+        "Number": "01012123434",
+        "Relation": "friend",
+        "Email": "myungho.dev@gmail.com",
+        "Address": "Gwangju, Korea",
+        "Comment": "best friend",
+        "__v": 0
+      },
+      {
+        "_id": "5d5a240848ecb923ccdc2628",
+        "Creator": "5d5a2208dfed63256c85e548",
+        "Name": "Mr. Kim",
+        "Number": "01055556666",
+        "Relation": "Boss",
+        "Email": "Kimsuper@gmail.com",
+        "Address": "Gwangju, Korea",
+        "Comment": "run away..",
+        "__v": 0
+      }
+    ]
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid user ID" }`
+
+  OR
+  
+  * **Code:** 404 Not Found <br />
+    **Content:** `{ error : "No item to serve" }`
+
+  OR
+
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** `{ error : "Internal server errort" }`
+    
+* **Sample Call:**
+
+  ```HTTP
+  GET http://127.0.0.1:3000/users HTTP/1.1
+  Authorization: bearer <Your auth token>
+  content-type: application/json
+  ```
+  
+**Show Phonebook Item**
+----
+  Returns json data about a single phonebook item.
+
+* **URL**
+
+  /users/:userId/phonebooks/:itemId
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `userId=[MongoDB ObjectID]` <br />
+   `itemId=[MongoDB ObjectID]`
+
+* **Data Params**
+
+   None
+
+* **Success Response:**
+
+  * **Code:** 200 OK <br />
+    **Content:** 
+    ```javascript
+    {
+      "_id": "5d5a229b48ecb923ccdc2627",
+      "Creator": "5d5a2208dfed63256c85e548",
+      "Name": "Yura",
+      "Number": "01012123434",
+      "Relation": "friend",
+      "Email": "myungho.dev@gmail.com",
+      "Address": "Gwangju, Korea",
+      "Comment": "best friend",
+      "__v": 0
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid user ID" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid item ID" }`
+
+  OR
+  
+  * **Code:** 404 Not Found <br />
+    **Content:** `{ error : "No item to serve" }`
+
+  OR
+
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** `{ error : "Internal server errort" }`
+    
+* **Sample Call:**
+
+  ```HTTP
+  GET http://127.0.0.1:3000/users/5d5a2208dfed63256c85e548/phonebooks/5d5a229b48ecb923ccdc2627 HTTP/1.1
+  content-type: application/json
+  Authorization: bearer <Your auth token>
+  ```
+  
+**Update Phonebook Item**
+----
+  Updates phonebook item data, and returns json data about the updated item. 
+
+* **URL**
+
+  /users/:userId/phonebooks/:itemId
+
+* **Method:**
+
+  `PUT`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `userId=[MongoDB ObjectID]` <br />
+   `itemId=[MongoDB ObjectID]`
+
+* **Data Params**
+
+    **Optional:**
+ 
+   `name=[string]` <br />
+   `number=[string]` <br />
+   `relation=[string]` <br />
+   `email=[string]` <br />
+   `address=[string]` <br />
+   `comment=[string]`
+
+* **Success Response:**
+
+  * **Code:** 200 OK <br />
+    **Content:** 
+    ```javascript
+    {
+      "_id": "5d5a229b48ecb923ccdc2627",
+      "Creator": "5d5a2208dfed63256c85e548",
+      "Name": "Yura",
+      "Number": "01012123434",
+      "Relation": "friend",
+      "Email": "wjrldsy52@naver.com",
+      "Address": "Gwangju, Korea",
+      "Comment": "forever",
+      "__v": 0
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid user ID" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid item ID" }`
+
+  OR
+
+  * **Code:** 404 Not Found <br />
+    **Content:** `{ error : "No item to update" }`
+    
+  OR
+  
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** `{ error : "Internal server errort" }`
+    
+* **Sample Call:**
+
+  ```HTTP
+  PUT http://127.0.0.1:3000/users/5d5a2208dfed63256c85e548/phonebooks/5d5a229b48ecb923ccdc2627 HTTP/1.1
+  content-type: application/json
+  Authorization: bearer <Your auth token>
+
+  {
+      "email": "wjrldsy52@naver.com",
+      "relation": "Lover",
+      "comment": "forever"
+  }
+  ```
+  
+**Delete Phonebook Item**
+----
+  Deletes phonebook item data, and returns json data about the deleted item. 
+
+* **URL**
+
+  /users/:userId/phonebooks/:itemId
+
+* **Method:**
+
+  `DELETE`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `userId=[MongoDB ObjectID]` <br />
+   `itemId=[MongoDB ObjectID]`
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 OK <br />
+    **Content:** 
+    ```javascript
+    {
+      "_id": "5d5a240848ecb923ccdc2628",
+      "Creator": "5d5a2208dfed63256c85e548",
+      "Name": "Mr. Kim",
+      "Number": "01055556666",
+      "Relation": "Boss",
+      "Email": "Kimsuper@gmail.com",
+      "Address": "Gwangju, Korea",
+      "Comment": "run away..",
+      "__v": 0
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid user ID" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid item ID" }`
+
+  OR
+
+  * **Code:** 404 Not Found <br />
+    **Content:** `{ error : "No item to delete" }`
+
+  OR
+  
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** `{ error : "Internal server errort" }`
+    
+* **Sample Call:**
+
+  ```HTTP
+  DELETE http://127.0.0.1:3000/users/5d5902b65d971b14b8aabd35 HTTP/1.1
+  content-type: application/json
+  Authorization: bearer <Your auth token>
+  ```
+  
+**Search Phonebook Item**
+----
+ Returns json data about the searched item. 
+
+* **URL**
+
+  /users/:userId/phonebooks/searches
+
+* **Method:**
+
+  `POST`
+  
+*  **URL Params**
+
+   None
+
+* **Data Params**
+
+   **Optional:**
+ 
+   `name=[string]` <br />
+   `number=[string]` <br />
+   `relation=[string]`
+
+* **Success Response:**
+
+  * **Code:** 200 OK <br />
+    **Content:** 
+    ```javascript
+    [
+      {
+        "_id": "5d5a29e13fe6560f4c6bff9f",
+        "Creator": "5d5a2208dfed63256c85e548",
+        "Name": "Mr. Kim",
+        "Number": "01055556666",
+        "Relation": "Boss",
+        "Email": "Kimsuper@gmail.com",
+        "Address": "Gwangju, Korea",
+        "Comment": "run away..",
+        "__v": 0
+      }
+    ]
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid user ID" }`
+
+  OR
+  
+  * **Code:** 400 Bad Request <br />
+    **Content:** `{ error : "Invalid JSON format" }`
+
+  OR
+  
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** `{ error : "Internal server errort" }`
+    
+* **Sample Call:**
+
+  ```HTTP
+  POST http://127.0.0.1:3000/users/5d5a2208dfed63256c85e548/phonebooks/searches HTTP/1.1
+  Authorization: bearer <Your auth token>
+  content-type: application/json
+
+  {
+      "name": "Kim"
+  }
   ```
