@@ -73,12 +73,7 @@ module.exports = {
 
     getUser: async (req, res, next) => {
         try {
-            const userId = req.params.userId;
-            if(!mongoose.Types.ObjectId.isValid(userId)) {
-                return res.status(422).json({error: 'Invalid user ID'});
-            }
-
-            const user = await User.findById(userId).select('-Password');
+            const user = await User.findById(req.params.userId).select('-Password');
             if(!user) {
                 return res.status(404).json({error: 'No user to serve'});
             }
@@ -93,12 +88,7 @@ module.exports = {
 
     updateUser: async (req, res, next) => {
         try {
-            const userId = req.params.userId;
-            if(!mongoose.Types.ObjectId.isValid(userId)) {
-                return res.status(422).json({error: 'Invalid user ID'});
-            }
-
-            const user = await User.findById(userId);
+            const user = await User.findById(req.params.userId);
             if(!user) {
                 return res.status(404).json({error: 'No user to update'});
             }
@@ -137,12 +127,7 @@ module.exports = {
 
     deleteUser: async (req, res, next) => {
         try {
-            const userId = req.params.userId;
-            if(!mongoose.Types.ObjectId.isValid(userId)) {
-                return res.status(422).json({error: 'Invalid user ID'});
-            }
-
-            const deletedUser = await User.findOneAndDelete({_id: userId}).select('-Password');
+            const deletedUser = await User.findOneAndDelete({_id: req.params.userId}).select('-Password');
             if(!deletedUser) {
                 return res.status(404).json({error: 'No user to delete'});
             }

@@ -114,7 +114,7 @@ module.exports = {
 
             const phonebook = await Phonebook.findOne({_id: itemId, Creator: req.userId});
             if(!phonebook) {
-                return res.status(404).json({error: 'No user to update'});
+                return res.status(404).json({error: 'No item to update'});
             }
 
             if(req.body.name) 
@@ -150,12 +150,12 @@ module.exports = {
                 return res.status(422).json({error: 'Invalid item ID'});
             }
 
-            const deletedPhonebook = await Phonebook.findOneAndDelete({_id: ititemIdemId, Creator: req.userId});
+            const deletedPhonebook = await Phonebook.findOneAndDelete({_id: itemId, Creator: req.userId});
             if(!deletedPhonebook) {
-                return res.status(404).json({error: 'No user to delete'});
+                return res.status(404).json({error: 'No item to delete'});
             }
 
-            res.status(404).json(deletedPhonebook);     
+            res.status(200).json(deletedPhonebook);     
         }
         catch(err) {
             console.error(err);
@@ -165,13 +165,13 @@ module.exports = {
 
     searchPhonebook: async (req, res, next) => {
         try {
-            if(req.body.terms) {
+            if(!req.body.name && !req.body.number && !req.body.relation) {
                 return res.status(400).json({error: 'Invalid JSON format'});
             }
 
-            const name = req.body.terms.name?req.body.terms.name:'';
-            const number = req.body.terms.number?req.body.terms.number:'';
-            const relation = req.body.terms.relation?req.body.terms.relation:'';
+            const name = req.body.name?req.body.name:'';
+            const number = req.body.number?req.body.number:'';
+            const relation = req.body.relation?req.body.relation:'';
 
             const nameReg = new RegExp(name.replace(/\s+/g,"\\s+"), "gi");
             const numberReg = new RegExp(number.replace(/\s+/g,"\\s+"), "gi");
