@@ -36,19 +36,19 @@ module.exports = {
                 return res.status(422).json({error: 'Name is too long'});
             }
 
-            if(req.body.relation.length > 20) {
+            if(req.body.relation && req.body.relation.length > 20) {
                 return res.status(422).json({error: 'Relation is too long'});
             }
 
-            if(req.body.comment.length > 20) {
+            if(req.body.comment && req.body.comment.length > 20) {
                 return res.status(422).json({error: 'Relation is too long'});
             }
 
-            if(req.body.address.length > 20) {
+            if(req.body.address && req.body.address.length > 20) {
                 return res.status(422).json({error: 'Address is too long'});
             }
                        
-            if(!ValidateEmail(req.body.email)) {
+            if(req.body.email && !ValidateEmail(req.body.email)) {
                 return res.status(422).json({error: 'Email format incorrect'});
             }
 
