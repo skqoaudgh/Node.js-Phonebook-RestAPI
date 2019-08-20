@@ -42,7 +42,7 @@ Phonebook Rest API made with Node.js, MongoDB
 
 * **Success Response:**
 
-  * **Code:** 201 Created <br />
+  * **Code:** 200 OK <br />
     **Content:** 
     ```javascript
     {
