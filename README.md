@@ -16,6 +16,12 @@ Phonebook Rest API made with Node.js, MongoDB
   4. [Update Phonebook Item](#update-phonebook-item)
   5. [Delete Phonebook Item](#delete-phonebook-item)
   6. [Search Phonebook Item](#search-phonebook-item)
+* Blacklist
+  1. [Create Blacklist Item](#create-blacklist-item)
+  2. [Show Blacklist Items](#show-blacklist-items)
+  3. [Show Blacklist Item](#show-blacklist-item)
+  4. [Update Blacklist Item](#update-blacklist-item)
+  5. [Delete Blacklist Item](#delete-blacklist-item)
   
 **Auth**
 ----
@@ -840,7 +846,7 @@ Phonebook Rest API made with Node.js, MongoDB
 * **Sample Call:**
 
   ```HTTP
-  DELETE http://127.0.0.1:3000/users/5d5902b65d971b14b8aabd35 HTTP/1.1
+  DELETE http://127.0.0.1:3000/users/5d5902b65d971b14b8aabd35/phonebooks/5d5a229b48ecb923ccdc2627 HTTP/1.1
   content-type: application/json
   Authorization: bearer <Your auth token>
   ```
@@ -919,4 +925,364 @@ Phonebook Rest API made with Node.js, MongoDB
   {
       "name": "Kim"
   }
+  ```
+  
+**Create Blacklist Item**
+----
+  Creates new blacklist item on database, and returns json data about the saved item. 
+
+* **URL**
+
+  /users/:userId/blacklists
+
+* **Method:**
+
+  `POST`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `userId=[MongoDB ObjectID]`
+
+* **Data Params**
+
+   **Required:**
+ 
+   `number=[string]`
+
+* **Success Response:**
+
+  * **Code:** 201 Created <br />
+    **Content:** 
+    ```javascript
+    {
+      "_id": "5d5cd21431056e27ec9e1f1e",
+      "Creator": "5d5a2208dfed63256c85e548",
+      "Number": "0703674455",
+      "__v": 0
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid user ID" }`
+
+  OR
+  
+  * **Code:** 400 Bad Request <br />
+    **Content:** `{ error : "Invalid JSON format" }`
+
+  OR
+  
+  * **Code:** 409 Conflict <br />
+    **Content:** `{ error : "Number is already exist in blacklist" }`
+
+  OR
+
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** `{ error : "Internal server errort" }`
+    
+* **Sample Call:**
+
+  ```HTTP
+  POST http://127.0.0.1:3000/users/5d5a2208dfed63256c85e548/blacklists HTTP/1.1
+  Authorization: bearer <Your auth token>
+  content-type: application/json
+
+  {
+      "number": "0703674455"
+  }
+  ```
+  
+**Show Blacklist Items**
+----
+  Returns json data about all blacklist items.
+
+* **URL**
+
+  /users/:userId/blacklists
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `userId=[MongoDB ObjectID]`
+
+* **Data Params**
+
+   None
+
+* **Success Response:**
+
+  * **Code:** 200 OK <br />
+    **Content:** 
+    ```javascript
+    [
+      {
+        "_id": "5d5cd21431056e27ec9e1f1e",
+        "Creator": "5d5a2208dfed63256c85e548",
+        "Number": "0703674455",
+        "__v": 0
+      },
+      {
+        "_id": "5d5cd3285f0e3c06e8196c4f",
+        "Creator": "5d5a2208dfed63256c85e548",
+        "Number": "01036241234",
+        "__v": 0
+      }
+    ]
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid user ID" }`
+
+  OR
+  
+  * **Code:** 404 Not Found <br />
+    **Content:** `{ error : "No item to serve" }`
+
+  OR
+
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** `{ error : "Internal server errort" }`
+    
+* **Sample Call:**
+
+  ```HTTP
+  GET http://127.0.0.1:3000/users/5d5a2208dfed63256c85e548/blacklists HTTP/1.1
+  Authorization: bearer <Your auth token>
+  content-type: application/json
+  ```
+  
+**Show Blacklist Item**
+----
+  Returns json data about a single blacklist item.
+
+* **URL**
+
+  /users/:userId/blacklists/:itemId
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `userId=[MongoDB ObjectID]` <br />
+   `itemId=[MongoDB ObjectID]`
+
+* **Data Params**
+
+   None
+
+* **Success Response:**
+
+  * **Code:** 200 OK <br />
+    **Content:** 
+    ```javascript
+    {
+      "_id": "5d5cd21431056e27ec9e1f1e",
+      "Creator": "5d5a2208dfed63256c85e548",
+      "Number": "0703674455",
+      "__v": 0
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid user ID" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid item ID" }`
+
+  OR
+  
+  * **Code:** 404 Not Found <br />
+    **Content:** `{ error : "No item to serve" }`
+
+  OR
+
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** `{ error : "Internal server errort" }`
+    
+* **Sample Call:**
+
+  ```HTTP
+  GET http://127.0.0.1:3000/users/5d5a2208dfed63256c85e548/blacklists/5d5cd21431056e27ec9e1f1e HTTP/1.1
+  content-type: application/json
+  Authorization: bearer <Your auth token>
+  ```
+  
+**Update Blacklist Item**
+----
+  Updates blacklist item data, and returns json data about the updated item. 
+
+* **URL**
+
+  /users/:userId/blacklists/:itemId
+
+* **Method:**
+
+  `PUT`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `userId=[MongoDB ObjectID]` <br />
+   `itemId=[MongoDB ObjectID]`
+
+* **Data Params**
+
+    **Required:**
+ 
+   `number=[string]`
+
+* **Success Response:**
+
+  * **Code:** 200 OK <br />
+    **Content:** 
+    ```javascript
+    {
+      "_id": "5d5cd21431056e27ec9e1f1e",
+      "Creator": "5d5a2208dfed63256c85e548",
+      "Number": "0103694451",
+      "__v": 0
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid user ID" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid item ID" }`
+
+  OR
+
+  * **Code:** 404 Not Found <br />
+    **Content:** `{ error : "No item to update" }`
+    
+  OR
+  
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** `{ error : "Internal server errort" }`
+    
+* **Sample Call:**
+
+  ```HTTP
+  PUT http://127.0.0.1:3000/users/5d5a2208dfed63256c85e548/blacklists/5d5ccd184a37a8098060ed30 HTTP/1.1
+  content-type: application/json
+  Authorization: bearer <Your auth token>
+
+  {
+      "email": "wjrldsy52@naver.com",
+      "group": "Lover",
+      "comment": "forever"
+  }
+  ```
+  
+**Delete Blacklist Item**
+----
+  Deletes blacklist item data, and returns json data about the deleted item. 
+
+* **URL**
+
+  /users/:userId/blacklists/:itemId
+
+* **Method:**
+
+  `DELETE`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `userId=[MongoDB ObjectID]` <br />
+   `itemId=[MongoDB ObjectID]`
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 OK <br />
+    **Content:** 
+    ```javascript
+    {
+      "_id": "5d5cd21431056e27ec9e1f1e",
+      "Creator": "5d5a2208dfed63256c85e548",
+      "Number": "0703674455",
+      "__v": 0
+    }
+    ```
+ 
+* **Error Response:**
+
+  * **Code:** 401 Unauthorized <br />
+    **Content:** `{ error : "Unauthenticated" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid user ID" }`
+
+  OR
+  
+  * **Code:** 422 Unprocessable Entity <br />
+    **Content:** `{ error : "Invalid item ID" }`
+
+  OR
+
+  * **Code:** 404 Not Found <br />
+    **Content:** `{ error : "No item to delete" }`
+
+  OR
+  
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** `{ error : "Internal server errort" }`
+    
+* **Sample Call:**
+
+  ```HTTP
+  DELETE http://127.0.0.1:3000/users/5d5a2208dfed63256c85e548/blacklists/5d5cd21431056e27ec9e1f1e HTTP/1.1
+  content-type: application/json
+  Authorization: bearer <Your auth token>
   ```
