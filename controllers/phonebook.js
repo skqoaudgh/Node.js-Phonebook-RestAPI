@@ -87,7 +87,7 @@ module.exports = {
 
     getPhonebook: async (req, res, next) => {
         try {
-            const itemId = req.params.Itemid;
+            const itemId = req.params.itemId;
             if(!mongoose.Types.ObjectId.isValid(itemId)) {
                 return res.status(422).json({error: 'Invalid item ID'});
             }
