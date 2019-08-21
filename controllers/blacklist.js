@@ -9,6 +9,11 @@ module.exports = {
                 return res.status(400).json({error: 'Invalid JSON format'});        
             }
     
+            const checkOverLap = await Blacklist.find({Creator: req.userId, Number: req.body.number});
+            if(checkOverLap && checkOverLap.length > 0) {
+                return res.status(409).json({error: 'Number is already exist in blacklist'});
+            }
+
             const inputBlacklist = new Blacklist({
                 Creator: req.userId,
                 Number: req.body.number.trim()
