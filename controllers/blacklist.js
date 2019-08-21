@@ -85,5 +85,25 @@ module.exports = {
             console.error(err);
             res.status(500).json({error: 'Internal server error'}); 
         }
+    },
+
+    deleteBlacklist: async (req, res, next) => {
+        try {
+            const itemId = req.params.itemId;
+            if(!mongoose.Types.ObjectId.isValid(itemId)) {
+                return res.status(422).json({error: 'Invalid item ID'});
+            }
+
+            const deletedBlacklist = await Blacklist.findOneAndDelete({_id: itemId, Creator: req.userId});
+            if(!deletedBlacklist) {
+                return res.status(404).json({error: 'No item to delete'});
+            }
+
+            res.status(200).json(deletedBlacklist);     
+        }
+        catch(err) {
+            console.error(err);
+            res.status(500).json({error: 'Internal server error'});           
+        }
     }
 }
