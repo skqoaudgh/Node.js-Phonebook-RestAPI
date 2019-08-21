@@ -459,7 +459,7 @@ Phonebook Rest API made with Node.js, MongoDB
    
     **Optional:**
  
-   `relation=[string]` <br />
+   `group=[string]` <br />
    `email=[string]` <br />
    `address=[string]` <br />
    `comment=[string]`
@@ -474,7 +474,7 @@ Phonebook Rest API made with Node.js, MongoDB
       "Creator": "5d5a2208dfed63256c85e548",
       "Name": "Yura",
       "Number": "01012123434",
-      "Relation": "friend",
+      "Group": "friend",
       "Email": "myungho.dev@gmail.com",
       "Address": "Gwangju, Korea",
       "Comment": "best friend",
@@ -522,7 +522,7 @@ Phonebook Rest API made with Node.js, MongoDB
   {
       "name": "Yura",
       "number": "01012123434",
-      "relation": "friend",
+      "group": "friend",
       "email": "myungho.dev@gmail.com",
       "address": "Gwangju, Korea",
       "comment": "best friend"
@@ -562,7 +562,7 @@ Phonebook Rest API made with Node.js, MongoDB
         "Creator": "5d5a2208dfed63256c85e548", // Your MongoDB ObjectID
         "Name": "Yura",
         "Number": "01012123434",
-        "Relation": "friend",
+        "Group": "friend",
         "Email": "myungho.dev@gmail.com",
         "Address": "Gwangju, Korea",
         "Comment": "best friend",
@@ -573,7 +573,7 @@ Phonebook Rest API made with Node.js, MongoDB
         "Creator": "5d5a2208dfed63256c85e548",
         "Name": "Mr. Kim",
         "Number": "01055556666",
-        "Relation": "Boss",
+        "Group": "Boss",
         "Email": "Kimsuper@gmail.com",
         "Address": "Gwangju, Korea",
         "Comment": "run away..",
@@ -643,7 +643,7 @@ Phonebook Rest API made with Node.js, MongoDB
       "Creator": "5d5a2208dfed63256c85e548",
       "Name": "Yura",
       "Number": "01012123434",
-      "Relation": "friend",
+      "Group": "friend",
       "Email": "myungho.dev@gmail.com",
       "Address": "Gwangju, Korea",
       "Comment": "best friend",
@@ -709,7 +709,7 @@ Phonebook Rest API made with Node.js, MongoDB
  
    `name=[string]` <br />
    `number=[string]` <br />
-   `relation=[string]` <br />
+   `group=[string]` <br />
    `email=[string]` <br />
    `address=[string]` <br />
    `comment=[string]`
@@ -724,7 +724,7 @@ Phonebook Rest API made with Node.js, MongoDB
       "Creator": "5d5a2208dfed63256c85e548",
       "Name": "Yura",
       "Number": "01012123434",
-      "Relation": "friend",
+      "Group": "friend",
       "Email": "wjrldsy52@naver.com",
       "Address": "Gwangju, Korea",
       "Comment": "forever",
@@ -766,7 +766,7 @@ Phonebook Rest API made with Node.js, MongoDB
 
   {
       "email": "wjrldsy52@naver.com",
-      "relation": "Lover",
+      "group": "Lover",
       "comment": "forever"
   }
   ```
@@ -804,7 +804,7 @@ Phonebook Rest API made with Node.js, MongoDB
       "Creator": "5d5a2208dfed63256c85e548",
       "Name": "Mr. Kim",
       "Number": "01055556666",
-      "Relation": "Boss",
+      "Group": "Boss",
       "Email": "Kimsuper@gmail.com",
       "Address": "Gwangju, Korea",
       "Comment": "run away..",
@@ -867,7 +867,7 @@ Phonebook Rest API made with Node.js, MongoDB
  
    `name=[string]` <br />
    `number=[string]` <br />
-   `relation=[string]`
+   `group=[string]`
 
 * **Success Response:**
 
@@ -880,7 +880,7 @@ Phonebook Rest API made with Node.js, MongoDB
         "Creator": "5d5a2208dfed63256c85e548",
         "Name": "Mr. Kim",
         "Number": "01055556666",
-        "Relation": "Boss",
+        "Group": "Boss",
         "Email": "Kimsuper@gmail.com",
         "Address": "Gwangju, Korea",
         "Comment": "run away..",
