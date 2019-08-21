@@ -14,7 +14,7 @@ const phonebookSchema = new Schema({
         type: String,
         required: true
     },
-    Relation: {
+    Group: {
         type: String,
         required: false
     },

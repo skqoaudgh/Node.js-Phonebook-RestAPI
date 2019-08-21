@@ -16,8 +16,8 @@ module.exports = {
                 return res.status(400).json({error: 'Invalid JSON format'});
             }
 
-            if(req.body.relation) {
-                req.body.relation = req.body.relation.trim();
+            if(req.body.group) {
+                req.body.group = req.body.group.trim();
             }
 
             if(req.body.email) {
@@ -36,12 +36,12 @@ module.exports = {
                 return res.status(422).json({error: 'Name is too long'});
             }
 
-            if(req.body.relation && req.body.relation.length > 20) {
-                return res.status(422).json({error: 'Relation is too long'});
+            if(req.body.group && req.body.group.length > 20) {
+                return res.status(422).json({error: 'Group name is too long'});
             }
 
             if(req.body.comment && req.body.comment.length > 20) {
-                return res.status(422).json({error: 'Relation is too long'});
+                return res.status(422).json({error: 'comment is too long'});
             }
 
             if(req.body.address && req.body.address.length > 20) {
@@ -56,7 +56,7 @@ module.exports = {
                 Creator: req.userId,
                 Name: req.body.name,
                 Number: req.body.number.trim(),
-                Relation: req.body.relation?(req.body.relation):'None',
+                Group: req.body.group?(req.body.group):'None',
                 Email: req.body.email?(req.body.email):'None',
                 Address: req.body.address?(req.body.address):'None',
                 Comment: req.body.comment?(req.body.comment):'None',
@@ -121,8 +121,8 @@ module.exports = {
                 phonebook.Name = req.body.name;
             if(req.body.number && req.body.number.trim())
                 phonebook.Number = req.body.number.trim();
-            if(req.body.relation)
-                phonebook.relation = req.body.relation;
+            if(req.body.group)
+                phonebook.group = req.body.group;
             if(req.body.email && req.body.email.trim())
                 phonebook.Email = req.body.email.trim();
             if(req.body.comment)
@@ -165,22 +165,22 @@ module.exports = {
 
     searchPhonebook: async (req, res, next) => {
         try {
-            if(!req.body.name && !req.body.number && !req.body.relation) {
+            if(!req.body.name && !req.body.number && !req.body.group) {
                 return res.status(400).json({error: 'Invalid JSON format'});
             }
 
             const name = req.body.name?req.body.name:'';
             const number = req.body.number?req.body.number:'';
-            const relation = req.body.relation?req.body.relation:'';
+            const group = req.body.group?req.body.group:'';
 
             const nameReg = new RegExp(name.replace(/\s+/g,"\\s+"), "gi");
             const numberReg = new RegExp(number.replace(/\s+/g,"\\s+"), "gi");
-            const relationReg = new RegExp(relation.replace(/\s+/g,"\\s+"), "gi");
+            const groupReg = new RegExp(group.replace(/\s+/g,"\\s+"), "gi");
 
             const phonebooks = await Phonebook.find({$and: [
                 {Name: {"$regex": nameReg}},
                 {Number: {"$regex": numberReg}},
-                {Relation: {"$regex": relationReg}},
+                {Group: {"$regex": groupReg}},
                 {Creator: req.userId}
             ]});
             
