@@ -10,11 +10,10 @@ const checkURI = require('../middleware/checkURI');
 
 router.get('/', isAuth, userController.getUsers);
 router.post('/', userController.createUser);
-router.get('/:userId', isAuth, checkURI, userController.getUser);
-router.put('/:userId', isAuth, checkURI, userController.updateUser);
-router.delete('/:userId', isAuth, checkURI, userController.deleteUser);
-
-router.use('/:userId/phonebooks', isAuth, checkURI, phonebookRouter);
-router.use('/:userId/blacklists', isAuth, checkURI, blacklistRouter);
+router.get('/:userId', checkURI, isAuth, userController.getUser);
+router.put('/:userId', checkURI, isAuth, userController.updateUser);
+router.delete('/:userId', checkURI, isAuth, userController.deleteUser);
+router.use('/:userId/phonebooks', checkURI, isAuth, phonebookRouter);
+router.use('/:userId/blacklists', checkURI, isAuth, blacklistRouter);
 
 module.exports = router;
