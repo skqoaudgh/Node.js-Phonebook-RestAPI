@@ -13,7 +13,11 @@ module.exports = {
     createItem: async (req, res, next) => {
         try {
             if(!req.body.name || !req.body.number || !req.body.name.trim() || !req.body.number.trim()) {
-                return res.status(400).json({error: 'Invalid JSON format'});
+                return res.status(400).json({error: {
+                    "status": 400,
+                    "error": 'InvalidJsonNodeValue',
+                    "message": 'The value provided for the JSON nodes in the request body was not in the correct format.'
+                }});
             }
 
             if(req.body.group) {
@@ -32,26 +36,6 @@ module.exports = {
                 req.body.address = req.body.address.trim();
             }
 
-            if(req.body.name.length > 20) {
-                return res.status(422).json({error: 'Name is too long'});
-            }
-
-            if(req.body.group && req.body.group.length > 20) {
-                return res.status(422).json({error: 'Group name is too long'});
-            }
-
-            if(req.body.comment && req.body.comment.length > 20) {
-                return res.status(422).json({error: 'comment is too long'});
-            }
-
-            if(req.body.address && req.body.address.length > 20) {
-                return res.status(422).json({error: 'Address is too long'});
-            }
-                       
-            if(req.body.email && !ValidateEmail(req.body.email)) {
-                return res.status(422).json({error: 'Email format incorrect'});
-            }
-
             const inputPhonebook = new Phonebook({
                 Creator: req.userId,
                 Name: req.body.name,
@@ -66,7 +50,11 @@ module.exports = {
         }
         catch(err) {
             console.error(err);
-            res.status(500).json({error: 'Internal server error'});           
+            res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }});            
         }
     },
 
@@ -74,14 +62,22 @@ module.exports = {
         try {
             const phonebooks = await Phonebook.find({Creator: req.userId});
             if(!phonebooks || phonebooks.length == 0) {
-                return res.status(404).json({error: 'No item to serve'});
+                return res.status(404).json({error: {
+                    "status": 404,
+                    "error": 'ItemNotFound',
+                    "message": 'The item does not exist.'
+                }});
             }
 
             res.status(200).json(phonebooks); 
         }
         catch(err) {
             console.error(err);
-            res.status(500).json({error: 'Internal server error'});                
+            res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }});               
         }
     },
 
@@ -89,19 +85,31 @@ module.exports = {
         try {
             const itemId = req.params.itemId;
             if(!mongoose.Types.ObjectId.isValid(itemId)) {
-                return res.status(422).json({error: 'Invalid item ID'});
+                return res.status(400).json({error: {
+                    "status": 400,
+                    "error": 'InvalidQueryParameterValue',
+                    "message": 'An invalid value was specified for itemId of the query parameters in the request URI.'
+                }});
             }
 
             const phonebook = await Phonebook.findOne({_id: itemId, Creator: req.userId});
             if(!phonebook) {
-                return res.status(404).json({error: 'No item to serve'});
+                return res.status(404).json({error: {
+                    "status": 404,
+                    "error": 'ItemNotFound',
+                    "message": 'The item does not exist.'
+                }});
             }
 
             res.status(200).json(phonebook);          
         }
         catch(err) {
             console.error(err);
-            return res.status(500).json({error: 'Internal server error'});                
+            return res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }});              
         }       
     },
 
@@ -109,12 +117,20 @@ module.exports = {
         try {
             const itemId = req.params.itemId;
             if(!mongoose.Types.ObjectId.isValid(itemId)) {
-                return res.status(422).json({error: 'Invalid item ID'});
+                return res.status(400).json({error: {
+                    "status": 400,
+                    "error": 'InvalidQueryParameterValue',
+                    "message": 'An invalid value was specified for itemId of the query parameters in the request URI.'
+                }});
             }
 
             const phonebook = await Phonebook.findOne({_id: itemId, Creator: req.userId});
             if(!phonebook) {
-                return res.status(404).json({error: 'No item to update'});
+                return res.status(404).json({error: {
+                    "status": 404,
+                    "error": 'ItemNotFound',
+                    "message": 'The item does not exist.'
+                }});
             }
 
             if(req.body.name) 
@@ -134,12 +150,20 @@ module.exports = {
             }
             catch(err) {
                 console.error(err);
-                res.status(500).json({error: 'Internal server error'});                   
+                res.status(500).json({error: {
+                    "status": 500,
+                    "error": 'InternalError',
+                    "message": 'The server encountered an internal error. Please retry the request.'
+                }});                  
             }
         }
         catch(err) {
             console.error(err);
-            res.status(500).json({error: 'Internal server error'}); 
+            res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }}); 
         }
     },
 
@@ -147,26 +171,42 @@ module.exports = {
         try {
             const itemId = req.params.itemId;
             if(!mongoose.Types.ObjectId.isValid(itemId)) {
-                return res.status(422).json({error: 'Invalid item ID'});
+                return res.status(400).json({error: {
+                    "status": 400,
+                    "error": 'InvalidQueryParameterValue',
+                    "message": 'An invalid value was specified for itemId of the query parameters in the request URI.'
+                }});
             }
 
             const deletedPhonebook = await Phonebook.findOneAndDelete({_id: itemId, Creator: req.userId});
             if(!deletedPhonebook) {
-                return res.status(404).json({error: 'No item to delete'});
+                return res.status(404).json({error: {
+                    "status": 404,
+                    "error": 'ItemNotFound',
+                    "message": 'The item does not exist.'
+                }});
             }
 
             res.status(200).json(deletedPhonebook);     
         }
         catch(err) {
             console.error(err);
-            res.status(500).json({error: 'Internal server error'});           
+            res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }});           
         }
     },
 
     searchPhonebook: async (req, res, next) => {
         try {
             if(!req.body.name && !req.body.number && !req.body.group) {
-                return res.status(400).json({error: 'Invalid JSON format'});
+                return res.status(400).json({error: {
+                    "status": 400,
+                    "error": 'InvalidJsonNodeValue',
+                    "message": 'The value provided for the JSON nodes in the request body was not in the correct format.'
+                }});
             }
 
             const name = req.body.name?req.body.name:'';
@@ -188,7 +228,11 @@ module.exports = {
         }
         catch(err) {
             console.error(err);
-            return res.status(500).json({error: 'Internal server error'});    
+            return res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }});    
         }
     }
 }

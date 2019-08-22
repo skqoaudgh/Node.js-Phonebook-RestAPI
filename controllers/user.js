@@ -7,37 +7,20 @@ module.exports = {
     createUser: async (req, res, next) => {
         try {
             if(!req.body.id || !req.body.password || !req.body.id.trim() || !req.body.password.trim() || !req.body.nickname) {
-                return res.status(400).json({error: 'Invalid JSON format'});
-            }
-
-            if(req.body.id.trim().length < 4) {
-                return res.status(422).json({error: 'ID is too short'});
-            }
-            else if(req.body.id.trim().length > 20) {
-                return res.status(422).json({error: 'ID is too long'});
-            }
-
-            if(req.body.nickname.length < 4) {
-                return res.status(422).json({error: 'Nickname is too short'});
-            }
-            else if(req.body.nickname.length > 20) {
-                return res.status(422).json({error: 'Nickname is too long'});
-            }
-
-            if(req.body.password.trim().length < 4) {
-                return res.status(422).json({error: 'Password is too short'});
-            }
-            else if(req.body.password.trim().length > 20) {
-                return res.status(422).json({error: 'Password is too long'});
-            }
-
-            if(req.body.comment.trim().length > 100) {
-                return res.status(422).json({error: 'Comment is too long'});
+                return res.status(400).json({error: {
+                    "status": 400,
+                    "error": 'InvalidJsonNodeValue',
+                    "message": 'The value provided for the JSON nodes in the request body was not in the correct format.'
+                }});
             }
 
             const searchedUser = await User.find({$or: [{ID: req.body.id}, {Nickname: req.body.nickname}]});
-            if(searchedUser.length > 0) {
-                return res.status(409).json({error: 'ID or Nickname is already exist'});
+            if(searchedUser && searchedUser.length > 0) {
+                return res.status(409).json({error: {
+                    "status": 409,
+                    "error": 'AccountAlreadyExists',
+                    "message": 'The specified account or nickname already exists.'
+                }});
             }
 
             const hashedPassword = await bcrypt.hashSync(req.body.password);
@@ -52,7 +35,11 @@ module.exports = {
         }
         catch(err) {
             console.error(err);
-            res.status(500).json({error: 'Internal server error'});
+            res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }}); 
         }
     },
 
@@ -60,14 +47,22 @@ module.exports = {
         try {
             const users = await User.find().select('-Password');
             if(!users) {
-                return res.status(404).json({error: 'No users to serve'});
+                return res.status(404).json({error: {
+                    "status": 404,
+                    "error": 'UserNotFound',
+                    "message": 'The user does not exist.'
+                }});
             }
 
             res.status(200).json(users);
         }
         catch(err) {
             console.error(err);     
-            res.status(500).json({error: 'Internal server error'});  
+            res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }}); 
         }
     },
 
@@ -75,14 +70,22 @@ module.exports = {
         try {
             const user = await User.findById(req.params.userId).select('-Password');
             if(!user) {
-                return res.status(404).json({error: 'No user to serve'});
+                return res.status(404).json({error: {
+                    "status": 404,
+                    "error": 'UserNotFound',
+                    "message": 'The user does not exist.'
+                }});
             }
 
             res.status(200).json(user);
         }
         catch(err) {
             console.error(err);     
-            return res.status(500).json({error: 'Internal server error'});             
+            return res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }});            
         }
     },
 
@@ -90,7 +93,11 @@ module.exports = {
         try {
             const user = await User.findById(req.params.userId);
             if(!user) {
-                return res.status(404).json({error: 'No user to update'});
+                return res.status(404).json({error: {
+                    "status": 404,
+                    "error": 'UserNotFound',
+                    "message": 'The user does not exist.'
+                }});
             }
 
             const searchedUser = await User.find({
@@ -99,7 +106,11 @@ module.exports = {
                     { _id: {$ne: user._id} }
                 ]});
             if(searchedUser.length > 0) {
-                return res.status(409).json({error: 'ID or Nickname is already exist'});
+                return res.status(409).json({error: {
+                    "status": 409,
+                    "error": 'AccountAlreadyExists',
+                    "message": 'The specified account or nickname already exists.'
+                }});
             }
 
             const hashedPassword = await bcrypt.hashSync(req.body.password);
@@ -116,12 +127,20 @@ module.exports = {
             }
             catch(err) {
                 console.error(err);
-                res.status(500).json({error: 'Internal server error'});                  
+                res.status(500).json({error: {
+                    "status": 500,
+                    "error": 'InternalError',
+                    "message": 'The server encountered an internal error. Please retry the request.'
+                }});                  
             }
         }
         catch(err) {
             console.error(err);
-            res.status(500).json({error: 'Internal server error'});
+            res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }}); 
         }
     },
 
@@ -129,14 +148,22 @@ module.exports = {
         try {
             const deletedUser = await User.findOneAndDelete({_id: req.params.userId}).select('-Password');
             if(!deletedUser) {
-                return res.status(404).json({error: 'No user to delete'});
+                return res.status(404).json({error: {
+                    "status": 404,
+                    "error": 'UserNotFound',
+                    "message": 'The user does not exist.'
+                }});
             }
 
             res.status(404).json(deletedUser);
         }
         catch(err) {
             console.error(err);
-            res.status(500).json({error: 'Internal server error'});           
+            res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }});        
         }
     }
 }

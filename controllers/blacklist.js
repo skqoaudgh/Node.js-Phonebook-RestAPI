@@ -6,12 +6,20 @@ module.exports = {
     createBlacklist: async (req, res, next) => {
         try {
             if(!req.body.number) {
-                return res.status(400).json({error: 'Invalid JSON format'});        
+                return res.status(400).json({error: {
+                    "status": 400,
+                    "error": 'InvalidJsonNodeValue',
+                    "message": 'The value provided for the JSON nodes in the request body was not in the correct format.'
+                }});        
             }
     
             const checkOverLap = await Blacklist.find({Creator: req.userId, Number: req.body.number});
             if(checkOverLap && checkOverLap.length > 0) {
-                return res.status(409).json({error: 'Number is already exist in blacklist'});
+                return res.status(409).json({error: {
+                    "status": 409,
+                    "error": 'ResourceAlreadyExists',
+                    "message": 'The number already exists.'
+                }});
             }
 
             const inputBlacklist = new Blacklist({
@@ -23,7 +31,11 @@ module.exports = {
         }
         catch(err) {
             console.error(err);
-            res.status(500).json({error: 'Internal server error'});            
+            res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }});               
         }
     },
 
@@ -31,14 +43,22 @@ module.exports = {
         try {
             const blacklists = await Blacklist.find({Creator: req.userId});
             if(!blacklists || blacklists.length == 0) {
-                return res.status(404).json({error: 'No item to serve'});
+                return res.status(404).json({error: {
+                    "status": 404,
+                    "error": 'ItemNotFound',
+                    "message": 'The item does not exist.'
+                }});
             }
 
             res.status(200).json(blacklists);    
         }
         catch(err) {
             console.error(err);
-            res.status(500).json({error: 'Internal server error'});             
+            res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }});                
         }
     },
 
@@ -46,19 +66,31 @@ module.exports = {
         try {
             const itemId = req.params.itemId;
             if(!mongoose.Types.ObjectId.isValid(itemId)) {
-                return res.status(422).json({error: 'Invalid item ID'});
+                return res.status(400).json({error: {
+                    "status": 400,
+                    "error": 'InvalidQueryParameterValue',
+                    "message": 'An invalid value was specified for itemId of the query parameters in the request URI.'
+                }});
             }
 
             const blacklist = await Blacklist.findOne({_id: itemId, Creator: req.userId});
             if(!blacklist) {
-                return res.status(404).json({error: 'No item to serve'});
+                return res.status(404).json({error: {
+                    "status": 404,
+                    "error": 'ItemNotFound',
+                    "message": 'The item does not exist.'
+                }});
             }
 
             res.status(200).json(blacklist);          
         }
         catch(err) {
             console.error(err);
-            return res.status(500).json({error: 'Internal server error'});                
+            return res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }});                   
         }       
     },
 
@@ -66,12 +98,20 @@ module.exports = {
         try {
             const itemId = req.params.itemId;
             if(!mongoose.Types.ObjectId.isValid(itemId)) {
-                return res.status(422).json({error: 'Invalid item ID'});
+                return res.status(400).json({error: {
+                    "status": 400,
+                    "error": 'InvalidQueryParameterValue',
+                    "message": 'An invalid value was specified for itemId of the query parameters in the request URI.'
+                }});
             }
 
             const blacklist = await Blacklist.findOne({_id: itemId, Creator: req.userId});
             if(!blacklist) {
-                return res.status(404).json({error: 'No item to update'});
+                return res.status(404).json({error: {
+                    "status": 404,
+                    "error": 'ItemNotFound',
+                    "message": 'The item does not exist.'
+                }});
             }
 
             if(req.body.number && req.body.number.trim())
@@ -83,12 +123,20 @@ module.exports = {
             }
             catch(err) {
                 console.error(err);
-                res.status(500).json({error: 'Internal server error'});                   
+                res.status(500).json({error: {
+                    "status": 500,
+                    "error": 'InternalError',
+                    "message": 'The server encountered an internal error. Please retry the request.'
+                }});                       
             }
         }
         catch(err) {
             console.error(err);
-            res.status(500).json({error: 'Internal server error'}); 
+            res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }});     
         }
     },
 
@@ -96,19 +144,31 @@ module.exports = {
         try {
             const itemId = req.params.itemId;
             if(!mongoose.Types.ObjectId.isValid(itemId)) {
-                return res.status(422).json({error: 'Invalid item ID'});
+                return res.status(400).json({error: {
+                    "status": 400,
+                    "error": 'InvalidQueryParameterValue',
+                    "message": 'An invalid value was specified for itemId of the query parameters in the request URI.'
+                }});
             }
 
             const deletedBlacklist = await Blacklist.findOneAndDelete({_id: itemId, Creator: req.userId});
             if(!deletedBlacklist) {
-                return res.status(404).json({error: 'No item to delete'});
+                return res.status(404).json({error: {
+                    "status": 404,
+                    "error": 'ItemNotFound',
+                    "message": 'The item does not exist.'
+                }});
             }
 
             res.status(200).json(deletedBlacklist);     
         }
         catch(err) {
             console.error(err);
-            res.status(500).json({error: 'Internal server error'});           
+            res.status(500).json({error: {
+                "status": 500,
+                "error": 'InternalError',
+                "message": 'The server encountered an internal error. Please retry the request.'
+            }});             
         }
     }
 }
