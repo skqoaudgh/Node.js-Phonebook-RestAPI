@@ -59,22 +59,58 @@ Phonebook Rest API made with Node.js, MongoDB
 * **Error Response:**
 
   * **Code:** 400 Bad Request <br />
-    **Content:** `{ error : "Invalid JSON format" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 400,
+        "error": 'InvalidJsonNodeValue',
+        "message": 'The value provided for the JSON nodes in the request body was not in the correct format.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 404 Not Found <br />
-    **Content:** `{ error : "No user to serve" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 404,
+        "error": 'UserNotFound',
+        "message": 'The user does not exist.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Invalid password" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 401,
+        "error": 'Unauthorized',
+        "message": 'The ID and password you provided for the JSON nodes in the request body did not match.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -134,22 +170,44 @@ Phonebook Rest API made with Node.js, MongoDB
 * **Error Response:**
 
   * **Code:** 400 Bad Request <br />
-    **Content:** `{ error : "Invalid JSON format" }`
-
-  OR
-
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "<field> is too short/long" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 400,
+        "error": 'InvalidJsonNodeValue',
+        "message": 'The value provided for the JSON nodes in the request body was not in the correct format.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 409 Conflict <br />
-    **Content:** `{ error : "ID or Nickname is already exist" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 409,
+        "error": 'AccountAlreadyExists',
+        "message": 'The specified account or nickname already exists.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -210,18 +268,45 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 404 Not Found <br />
-    **Content:** `{ error : "No users to serve" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 404,
+        "error": 'UserNotFound',
+        "message": 'The user does not exist.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -269,23 +354,45 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ``` 
 
   OR
 
   * **Code:** 404 Not Found <br />
-    **Content:** `{ error : "No user to serve" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 404,
+        "error": 'UserNotFound',
+        "message": 'The user does not exist.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -339,28 +446,59 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 404 Not Found <br />
-    **Content:** `{ error : "No user to update" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 404,
+        "error": 'UserNotFound',
+        "message": 'The user does not exist.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 409 Conflict <br />
-    **Content:** `{ error : "ID or Nickname is already exist" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 409,
+        "error": 'AccountAlreadyExists',
+        "message": 'The specified account or nickname already exists.'
+      }
+    }
+    ```
     
   OR
   
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -412,23 +550,45 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 404 Not Found <br />
-    **Content:** `{ error : "No user to delete" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 404,
+        "error": 'UserNotFound',
+        "message": 'The user does not exist.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -490,33 +650,45 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 400 Bad Request <br />
-    **Content:** `{ error : "Invalid JSON format" }`
-
-  OR
-
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "<field> is too long" }`
-
-  OR
-
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Email format incorrect" }`
-
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 400,
+        "error": 'InvalidJsonNodeValue',
+        "message": 'The value provided for the JSON nodes in the request body was not in the correct format.'
+      }
+    }
+    ```
+    
   OR
 
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -590,23 +762,45 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 404 Not Found <br />
-    **Content:** `{ error : "No item to serve" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 404,
+        "error": 'ItemNotFound',
+        "message": 'The item does not exist.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -659,28 +853,59 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
   
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid item ID" }`
+  * **Code:** 400 Bad Request <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 400,
+        "error": 'InvalidQueryParameterValue',
+        "message": 'An invalid value was specified for itemId of the query parameters in the request URI.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 404 Not Found <br />
-    **Content:** `{ error : "No item to serve" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 404,
+        "error": 'ItemNotFound',
+        "message": 'The item does not exist.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -740,28 +965,59 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
   
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid item ID" }`
-
+  * **Code:** 400 Bad Request <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 400,
+        "error": 'InvalidQueryParameterValue',
+        "message": 'An invalid value was specified for itemId of the query parameters in the request URI.'
+      }
+    }
+    ```
+    
   OR
 
   * **Code:** 404 Not Found <br />
-    **Content:** `{ error : "No item to update" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 404,
+        "error": 'ItemNotFound',
+        "message": 'The item does not exist.'
+      }
+    }
+    ```
     
   OR
   
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -820,28 +1076,59 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
   
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid item ID" }`
+  * **Code:** 400 Bad Request <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 400,
+        "error": 'InvalidQueryParameterValue',
+        "message": 'An invalid value was specified for itemId of the query parameters in the request URI.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 404 Not Found <br />
-    **Content:** `{ error : "No item to delete" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 404,
+        "error": 'ItemNotFound',
+        "message": 'The item does not exist.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -897,23 +1184,45 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 400 Bad Request <br />
-    **Content:** `{ error : "Invalid JSON format" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 400,
+        "error": 'InvalidJsonNodeValue',
+        "message": 'The value provided for the JSON nodes in the request body was not in the correct format.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -966,28 +1275,59 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 400 Bad Request <br />
-    **Content:** `{ error : "Invalid JSON format" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 400,
+        "error": 'InvalidJsonNodeValue',
+        "message": 'The value provided for the JSON nodes in the request body was not in the correct format.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 409 Conflict <br />
-    **Content:** `{ error : "Number is already exist in blacklist" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 409,
+        "error": 'ResourceAlreadyExists',
+        "message": 'The number already exists.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -1046,23 +1386,45 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 404 Not Found <br />
-    **Content:** `{ error : "No item to serve" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 404,
+        "error": 'ItemNotFound',
+        "message": 'The item does not exist.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -1110,28 +1472,59 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
   
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid item ID" }`
+  * **Code:** 400 Bad Request <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 400,
+        "error": 'InvalidQueryParameterValue',
+        "message": 'An invalid value was specified for itemId of the query parameters in the request URI.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 404 Not Found <br />
-    **Content:** `{ error : "No item to serve" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 404,
+        "error": 'ItemNotFound',
+        "message": 'The item does not exist.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -1181,28 +1574,59 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
   
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid item ID" }`
+  * **Code:** 400 Bad Request <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 400,
+        "error": 'InvalidQueryParameterValue',
+        "message": 'An invalid value was specified for itemId of the query parameters in the request URI.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 404 Not Found <br />
-    **Content:** `{ error : "No item to update" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 404,
+        "error": 'ItemNotFound',
+        "message": 'The item does not exist.'
+      }
+    }
+    ```
     
   OR
   
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
@@ -1256,28 +1680,59 @@ Phonebook Rest API made with Node.js, MongoDB
  
 * **Error Response:**
 
-  * **Code:** 401 Unauthorized <br />
-    **Content:** `{ error : "Unauthenticated" }`
+  * **Code:** 403 Forbidden <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 403,
+        "error": 'AuthenticationFailed',
+        "message": 'Server failed to authenticate the request. Make sure the value of the Authorization header is formed correctly including the signature.'
+      }
+    }
+    ```
 
   OR
   
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid user ID" }`
-
-  OR
-  
-  * **Code:** 422 Unprocessable Entity <br />
-    **Content:** `{ error : "Invalid item ID" }`
+  * **Code:** 400 Bad Request <br />
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 400,
+        "error": 'InvalidQueryParameterValue',
+        "message": 'An invalid value was specified for itemId of the query parameters in the request URI.'
+      }
+    }
+    ```
 
   OR
 
   * **Code:** 404 Not Found <br />
-    **Content:** `{ error : "No item to delete" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 404,
+        "error": 'ItemNotFound',
+        "message": 'The item does not exist.'
+      }
+    }
+    ```
 
   OR
   
   * **Code:** 500 Internal Server Error <br />
-    **Content:** `{ error : "Internal server errort" }`
+    **Content:**
+    ```javascript
+    { 
+      error: {
+        "status": 500,
+        "error": 'InternalError',
+        "message": 'The server encountered an internal error. Please retry the request.'
+      }
+    }
+    ```
     
 * **Sample Call:**
 
