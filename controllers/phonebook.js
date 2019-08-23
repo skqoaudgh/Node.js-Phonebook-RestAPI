@@ -61,7 +61,7 @@ module.exports = {
     getPhonebooks: async (req, res, next) => {
         try {
             const phonebooks = await Phonebook.find({Creator: req.userId});
-            if(!phonebooks || phonebooks.length == 0) {
+            if(phonebooks && phonebooks.length == 0) {
                 return res.status(404).json({error: {
                     "status": 404,
                     "error": 'ItemNotFound',

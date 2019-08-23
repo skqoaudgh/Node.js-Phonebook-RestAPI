@@ -42,7 +42,7 @@ module.exports = {
     getBlacklists: async (req, res, next) => {
         try {
             const blacklists = await Blacklist.find({Creator: req.userId});
-            if(!blacklists || blacklists.length == 0) {
+            if(blacklists && blacklists.length == 0) {
                 return res.status(404).json({error: {
                     "status": 404,
                     "error": 'ItemNotFound',

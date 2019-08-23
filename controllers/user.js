@@ -46,7 +46,7 @@ module.exports = {
     getUsers: async (req, res, next) => {
         try {
             const users = await User.find().select('-Password');
-            if(!users) {
+            if(users && users.length == 0) {
                 return res.status(404).json({error: {
                     "status": 404,
                     "error": 'UserNotFound',
@@ -105,7 +105,7 @@ module.exports = {
                     { $or: [{ID: req.body.id}, {Nickname: req.body.nickname}] },
                     { _id: {$ne: user._id} }
                 ]});
-            if(searchedUser.length > 0) {
+            if(searchedUser && searchedUser.length > 0) {
                 return res.status(409).json({error: {
                     "status": 409,
                     "error": 'AccountAlreadyExists',
