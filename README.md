@@ -1,6 +1,9 @@
 # Node.js-Phonebook-RestAPI
 Phonebook Rest API made with Node.js, MongoDB
 
+## GraphQL API version of this project
+You can check it out [here](https://github.com/skqoaudgh/Node.js-Phonebook-GraphQL)!
+
 ## Table of Contents
 * [Auth](#auth)
 * User
